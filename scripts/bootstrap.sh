@@ -2,6 +2,9 @@
 # Runs on every pod start. Everything is idempotent: what is already on the volume is skipped, interrupted downloads resume.
 # Env (set in the RunPod template):  HF_TOKEN (optional)  MODEL_SET=image,video,finish (default all)  I2V=1 (also photo-to-video model)
 #   COMFY_ARGS (extra ComfyUI flags)   AUTO_STOP_MIN=30 (stop the pod after that many idle minutes; 0 = never)
+#   Without a network volume everything below is fetched again on every start (the container disk is erased when the pod stops):
+#   ICY_ZIP_URL (direct link to icynodes.zip)   LORA_URLS / INPUT_URLS (space-separated direct links -> models/loras and input)
+#   For links on huggingface.co (also private repos) HF_TOKEN is used automatically.
 set -uo pipefail
 DATA=/workspace/comfy; M=$DATA/models; CN=$DATA/custom_nodes
 MODEL_SET="${MODEL_SET:-image,video,finish}"
@@ -12,6 +15,22 @@ echo "== $(date) bootstrap start; ComfyUI $(sed -n 's/^__version__ *= *"\(.*\)"/
 
 # nodes baked into the image are made visible through symlinks (the volume copy of a node wins)
 for d in /opt/baked/custom_nodes/*/; do n=$(basename "$d"); [ -e "$CN/$n" ] || ln -s "$d" "$CN/$n"; done
+
+dl() { # dl <url> <dir>
+  local url="$1" dir="$2" name; name="$(basename "${url%%\?*}")"
+  if [ -s "$dir/$name" ] && [ ! -f "$dir/$name.part" ]; then return 0; fi
+  echo "fetch $name"
+  local ah=(); [[ "$url" == *huggingface.co* && -n "${HF_TOKEN:-}" ]] && ah=(--header="Authorization: Bearer $HF_TOKEN")
+  touch "$dir/$name.part"
+  if aria2c -c -x 16 -s 16 -k 8M --file-allocation=none --console-log-level=warn --summary-interval=30 "${ah[@]}" -d "$dir" -o "$name" "$url"; then
+    rm -f "$dir/$name.part"
+  else echo "FAILED $name (it resumes on the next start)"; return 1; fi
+}
+
+# files you supply by link (private things stay out of the image)
+[ -n "${ICY_ZIP_URL:-}" ] && dl "$ICY_ZIP_URL" /workspace
+for u in ${LORA_URLS:-}; do dl "$u" "$M/loras"; done
+for u in ${INPUT_URLS:-}; do dl "$u" "$DATA/input"; done
 
 # IcyNodes from the zip you keep on the volume (private, so not inside the image)
 if [ ! -f "$CN/icynodes/__init__.py" ]; then
@@ -27,17 +46,6 @@ fi
 
 # workflows from the image (overwritten each start; save your own edits under a new name)
 cp -f /opt/h3/workflows/*.json "$DATA/user/default/workflows/" 2>/dev/null
-
-dl() { # dl <url> <dir>
-  local url="$1" dir="$2" name; name="$(basename "${url%%\?*}")"
-  if [ -s "$dir/$name" ] && [ ! -f "$dir/$name.part" ]; then return 0; fi
-  echo "fetch $name"
-  local ah=(); [[ "$url" == *huggingface.co* && -n "${HF_TOKEN:-}" ]] && ah=(--header="Authorization: Bearer $HF_TOKEN")
-  touch "$dir/$name.part"
-  if aria2c -c -x 16 -s 16 -k 8M --file-allocation=none --console-log-level=warn --summary-interval=30 "${ah[@]}" -d "$dir" -o "$name" "$url"; then
-    rm -f "$dir/$name.part"
-  else echo "FAILED $name (it resumes on the next start)"; return 1; fi
-}
 
 touch /workspace/.h3_downloading
 H=https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main

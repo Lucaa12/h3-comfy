@@ -25,3 +25,8 @@ One image with ComfyUI (current), all custom nodes and the Model 2 workflows. **
 - To update ComfyUI: run the Action again (pulls the latest ComfyUI), then redeploy.
 - MiniMax H3 weights have their own licence (not valid in the EU, UK, USA, South Korea). Read it on Hugging Face first.
 - Do not put tokens into the repo; use the template environment variables.
+
+## Without a network volume (models download on every start)
+- Set the template **container disk to 120 GB** and attach no volume. Each start downloads ~75 GB (a few minutes with 16 parallel connections; the pod bills while it downloads).
+- Everything on the container disk is **erased when the pod stops**, including your outputs. Download videos and images before you stop the pod. This also means `AUTO_STOP_MIN` deletes unsaved outputs: set it to `0` if you want to decide yourself.
+- Supply your own files by link in the template environment (private Hugging Face repo links work with `HF_TOKEN`): `ICY_ZIP_URL`, `LORA_URLS` (space-separated), `INPUT_URLS` (for `model2_anchor.png`).
