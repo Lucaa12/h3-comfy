@@ -1,0 +1,5391 @@
+{
+ "id": "087d11ed-3b50-51f9-9574-ebff709ab068",
+ "revision": 0,
+ "last_node_id": 185,
+ "last_link_id": 350,
+ "nodes": [
+  {
+   "id": 1,
+   "type": "UNETLoader",
+   "pos": [
+    -560,
+    -1240
+   ],
+   "size": [
+    420,
+    90
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      194,
+      195,
+      208,
+      221,
+      234,
+      247,
+      260,
+      273,
+      286,
+      299,
+      312,
+      325,
+      338
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.43.0",
+    "Node name for S&R": "UNETLoader",
+    "models": [
+     {
+      "name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+      "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+      "directory": "diffusion_models"
+     }
+    ],
+    "ue_properties": {
+     "widget_ue_connectable": {},
+     "version": "8.0.1",
+     "input_ue_unconnectable": {}
+    }
+   },
+   "widgets_values": [
+    "minimax_h3_image_pruned_int8_convrot.safetensors",
+    "default"
+   ],
+   "widgets_values_named": {
+    "unet_name": "minimax_h3_image_pruned_int8_convrot.safetensors",
+    "weight_dtype": "default"
+   }
+  },
+  {
+   "id": 3,
+   "type": "VAELoader",
+   "pos": [
+    -560,
+    -1130
+   ],
+   "size": [
+    420,
+    60
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "VAE",
+     "type": "VAE",
+     "links": [
+      105,
+      206,
+      219,
+      232,
+      245,
+      258,
+      271,
+      284,
+      297,
+      310,
+      323,
+      336,
+      349
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.43.0",
+    "Node name for S&R": "VAELoader",
+    "models": [
+     {
+      "name": "p-h3-image_vae_int8_convrot.safetensors",
+      "url": "https://huggingface.co/PrunaAI/p-h3-image-comfy/resolve/main/vae/p-h3-image_vae_int8_convrot.safetensors",
+      "directory": "vae"
+     }
+    ],
+    "ue_properties": {
+     "widget_ue_connectable": {},
+     "version": "8.0.1",
+     "input_ue_unconnectable": {}
+    }
+   },
+   "widgets_values": [
+    "minimax_h3_image_vae_fp16.safetensors"
+   ],
+   "widgets_values_named": {
+    "vae_name": "minimax_h3_image_vae_fp16.safetensors"
+   }
+  },
+  {
+   "id": 11,
+   "type": "KSamplerSelect",
+   "pos": [
+    -560,
+    -460
+   ],
+   "size": [
+    266.64232364059717,
+    80.18939105490927
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "SAMPLER",
+     "type": "SAMPLER",
+     "links": [
+      202,
+      215,
+      228,
+      241,
+      254,
+      267,
+      280,
+      293,
+      306,
+      319,
+      332,
+      345
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.43.0",
+    "Node name for S&R": "KSamplerSelect",
+    "ue_properties": {
+     "widget_ue_connectable": {},
+     "version": "8.0.1",
+     "input_ue_unconnectable": {}
+    }
+   },
+   "widgets_values": [
+    "lcm"
+   ],
+   "widgets_values_named": {
+    "sampler_name": "lcm"
+   }
+  },
+  {
+   "id": 56,
+   "type": "IcyImageLoader",
+   "pos": [
+    -1130,
+    -1240
+   ],
+   "size": [
+    520,
+    600
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      116
+     ]
+    },
+    {
+     "name": "MASK",
+     "type": "MASK",
+     "links": null
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "IcyImageLoader"
+   },
+   "widgets_values": [
+    "input",
+    "model2_anchor.png",
+    "image",
+    "gallery"
+   ],
+   "widgets_values_named": {
+    "folder": "input",
+    "image": "comfyui_02050.jpg",
+    "upload": "image",
+    "🖼️ Open Gallery": "gallery"
+   },
+   "title": "Picture 1 = her anchor (upload model2_anchor.png to ComfyUI/input)"
+  },
+  {
+   "id": 57,
+   "type": "IcyMegapixelResize",
+   "pos": [
+    -560,
+    -790
+   ],
+   "size": [
+    270,
+    170
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "image",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": []
+    },
+    {
+     "name": "width",
+     "type": "INT",
+     "links": [
+      106
+     ]
+    },
+    {
+     "name": "height",
+     "type": "INT",
+     "links": [
+      107
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "IcyMegapixelResize",
+    "ue_properties": {
+     "version": "8.0.1",
+     "widget_ue_connectable": {},
+     "input_ue_unconnectable": {},
+     "title_regex": null,
+     "input_regex": null,
+     "group_regex": null,
+     "title_regex_invert": false,
+     "input_regex_invert": false,
+     "group_regex_invert": false,
+     "apply_to_unrepeated": 0,
+     "send_to_any": 0,
+     "string_to_combo": 0,
+     "repeated_type_rule": 0,
+     "group_restricted": 0,
+     "color_restricted": 0
+    }
+   },
+   "widgets_values": [
+    2.0,
+    "nearest-exact",
+    32,
+    "9:16"
+   ],
+   "widgets_values_named": {
+    "megapixels": 8,
+    "upscale_method": "nearest-exact",
+    "divisible_by": 32,
+    "aspect_ratio": "2:3"
+   },
+   "title": "size: megapixels + aspect (2.0 MP, 9:16)"
+  },
+  {
+   "id": 67,
+   "type": "MiniMaxH3ImageConditioning",
+   "pos": [
+    -90,
+    -1240
+   ],
+   "size": [
+    495.6053332292506,
+    256
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "clip",
+     "type": "CLIP",
+     "link": 165
+    },
+    {
+     "name": "vae",
+     "shape": 7,
+     "type": "VAE",
+     "link": 105
+    },
+    {
+     "name": "images.image_0",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": 116
+    },
+    {
+     "name": "images.image_1",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": null
+    },
+    {
+     "name": "images.image_2",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": null
+    },
+    {
+     "name": "images.image_3",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": null
+    },
+    {
+     "name": "images.image_4",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": null
+    },
+    {
+     "name": "prompt",
+     "type": "STRING",
+     "widget": {
+      "name": "prompt"
+     },
+     "link": 193
+    },
+    {
+     "name": "width",
+     "type": "INT",
+     "widget": {
+      "name": "width"
+     },
+     "link": 106
+    },
+    {
+     "name": "height",
+     "type": "INT",
+     "widget": {
+      "name": "height"
+     },
+     "link": 107
+    }
+   ],
+   "outputs": [
+    {
+     "name": "positive",
+     "type": "CONDITIONING",
+     "links": [
+      199,
+      212,
+      225,
+      238,
+      251,
+      264,
+      277,
+      290,
+      303,
+      316,
+      329,
+      342
+     ]
+    },
+    {
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      204,
+      217,
+      230,
+      243,
+      256,
+      269,
+      282,
+      295,
+      308,
+      321,
+      334,
+      347
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.44.0",
+    "Node name for S&R": "MiniMaxH3ImageConditioning"
+   },
+   "widgets_values": [
+    "",
+    0,
+    0
+   ],
+   "widgets_values_named": {
+    "prompt": "Full-body front view of a woman standing against a clean white backdrop in a candid, natural pose, wearing a black tank top and jeans.\n\nFull-body back view of a woman standing in front of a plain white backdrop, candidly captured; she is wearing a black tank top and jeans.\n\nFrontal headshot of a woman with shoulder-length hair, wearing a black tank top and jeans, captured in a candid style against a clean white backdrop.",
+    "width": 0,
+    "height": 0
+   }
+  },
+  {
+   "id": 68,
+   "type": "BasicScheduler",
+   "pos": [
+    -560,
+    -590
+   ],
+   "size": [
+    231.0633172512462,
+    106
+   ],
+   "flags": {},
+   "order": 11,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 194
+    }
+   ],
+   "outputs": [
+    {
+     "name": "SIGMAS",
+     "type": "SIGMAS",
+     "links": [
+      203,
+      216,
+      229,
+      242,
+      255,
+      268,
+      281,
+      294,
+      307,
+      320,
+      333,
+      346
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.44.0",
+    "Node name for S&R": "BasicScheduler"
+   },
+   "widgets_values": [
+    "sgm_uniform",
+    6,
+    1
+   ],
+   "widgets_values_named": {
+    "scheduler": "sgm_uniform",
+    "steps": 6,
+    "denoise": 1
+   }
+  },
+  {
+   "id": 79,
+   "type": "CLIPLoader",
+   "pos": [
+    -560,
+    -1040
+   ],
+   "size": [
+    421.3683223048715,
+    110.19369014842073
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "CLIP",
+     "type": "CLIP",
+     "links": [
+      165
+     ]
+    }
+   ],
+   "title": "Text encoder",
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.43.0",
+    "Node name for S&R": "CLIPLoader",
+    "models": [
+     {
+      "name": "p-h3-image_text_encoder_int8_convrot.safetensors",
+      "url": "https://huggingface.co/PrunaAI/p-h3-image-comfy/resolve/main/text_encoders/p-h3-image_text_encoder_int8_convrot.safetensors",
+      "directory": "text_encoders"
+     }
+    ],
+    "ue_properties": {
+     "widget_ue_connectable": {},
+     "version": "8.0.1",
+     "input_ue_unconnectable": {}
+    }
+   },
+   "widgets_values": [
+    "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+    "minimax",
+    "default"
+   ],
+   "widgets_values_named": {
+    "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+    "type": "minimax",
+    "device": "default"
+   }
+  },
+  {
+   "id": 89,
+   "type": "RandomNoise",
+   "pos": [
+    -560,
+    -910
+   ],
+   "size": [
+    320,
+    90
+   ],
+   "flags": {},
+   "order": 7,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "NOISE",
+     "type": "NOISE",
+     "links": [
+      200,
+      213,
+      226,
+      239,
+      252,
+      265,
+      278,
+      291,
+      304,
+      317,
+      330,
+      343
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.43.0",
+    "Node name for S&R": "RandomNoise",
+    "ue_properties": {
+     "widget_ue_connectable": {},
+     "version": "8.0.1",
+     "input_ue_unconnectable": {}
+    }
+   },
+   "widgets_values": [
+    999701062746193,
+    "fixed"
+   ],
+   "widgets_values_named": {
+    "noise_seed": 999701062746193,
+    "control_after_generate": "fixed"
+   }
+  },
+  {
+   "id": 108,
+   "type": "PrimitiveStringMultiline",
+   "pos": [
+    -90,
+    -960
+   ],
+   "size": [
+    820,
+    150
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "STRING",
+     "type": "STRING",
+     "links": [
+      191
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "PrimitiveStringMultiline",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "ine3ss, a 19-year-old adult woman with long straight black hair with chunky teal-turquoise streaks and a centre part, warm brown almond-shaped eyes with long natural lashes, soft natural brushed-up brown eyebrows, fair light skin, a fresh youthful face with light natural makeup, full natural lips with clear lip gloss."
+   ],
+   "title": "1 · HER LOOK (trigger word first)",
+   "color": "#1f4a2b",
+   "bgcolor": "#2b6a3d"
+  },
+  {
+   "id": 109,
+   "type": "PrimitiveStringMultiline",
+   "pos": [
+    -90,
+    -790
+   ],
+   "size": [
+    820,
+    230
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "STRING",
+     "type": "STRING",
+     "links": [
+      192
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "PrimitiveStringMultiline",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "Photorealistic front-camera selfie of the exact same person as <Picture 1>: identical face, skin tone, age, black hair with the same teal-turquoise streaks and centre part. Medium close-up down to the hips against a plain white wall, head slightly tilted, arms relaxed away from the body, sceptical raised-brow expression, wearing a black sleeveless scoop-neck top, layered gold chains with a Y-drop pendant and gold hoop earrings. Soft flat daylight, natural slight grain, sharp focus on the face, true-to-life skin texture with visible pores, no beauty filter, no skin smoothing. Change only the pose, outfit, place and light."
+   ],
+   "title": "2 · THE SHOT (pose, outfit, place, light)",
+   "color": "#1f4a2b",
+   "bgcolor": "#2b6a3d"
+  },
+  {
+   "id": 110,
+   "type": "StringConcatenate",
+   "pos": [
+    -90,
+    -540
+   ],
+   "size": [
+    400,
+    110
+   ],
+   "flags": {
+    "collapsed": true
+   },
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "string_a",
+     "type": "STRING",
+     "link": 191,
+     "widget": {
+      "name": "string_a"
+     }
+    },
+    {
+     "name": "string_b",
+     "type": "STRING",
+     "link": 192,
+     "widget": {
+      "name": "string_b"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "STRING",
+     "type": "STRING",
+     "links": [
+      193
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "StringConcatenate",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "",
+    "",
+    " "
+   ],
+   "title": "look + shot"
+  },
+  {
+   "id": 112,
+   "type": "PrimitiveFloat",
+   "pos": [
+    -560,
+    -330
+   ],
+   "size": [
+    420,
+    80
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "FLOAT",
+     "type": "FLOAT",
+     "links": [
+      196,
+      209,
+      222,
+      235,
+      248,
+      261,
+      274,
+      287,
+      300,
+      313,
+      326,
+      339
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "PrimitiveFloat",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    1.0
+   ],
+   "title": "LoRA strength for ALL checkpoints (1.0; try 0.7-0.9)",
+   "color": "#1f4a2b",
+   "bgcolor": "#2b6a3d"
+  },
+  {
+   "id": 113,
+   "type": "LoraLoaderModelOnly",
+   "pos": [
+    760,
+    -1240
+   ],
+   "size": [
+    330,
+    100
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 195
+    },
+    {
+     "name": "strength_model",
+     "type": "FLOAT",
+     "link": 196,
+     "widget": {
+      "name": "strength_model"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      197
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "LoraLoaderModelOnly",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "ine3ss_000000250.safetensors",
+    1.0
+   ],
+   "title": "step 250",
+   "color": "#1f4a2b",
+   "bgcolor": "#2b6a3d"
+  },
+  {
+   "id": 114,
+   "type": "ModelAttentionBackend",
+   "pos": [
+    760,
+    -1120
+   ],
+   "size": [
+    330,
+    58
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 197
+    }
+   ],
+   "outputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "links": [
+      198
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ModelAttentionBackend",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "comfy kitchen attention"
+   ]
+  },
+  {
+   "id": 115,
+   "type": "BasicGuider",
+   "pos": [
+    760,
+    -1040
+   ],
+   "size": [
+    330,
+    60
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 198
+    },
+    {
+     "name": "conditioning",
+     "type": "CONDITIONING",
+     "link": 199
+    }
+   ],
+   "outputs": [
+    {
+     "name": "GUIDER",
+     "type": "GUIDER",
+     "links": [
+      201
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "BasicGuider",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 116,
+   "type": "SamplerCustomAdvanced",
+   "pos": [
+    760,
+    -960
+   ],
+   "size": [
+    330,
+    140
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 200
+    },
+    {
+     "name": "guider",
+     "type": "GUIDER",
+     "link": 201
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 202
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 203
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 204
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output",
+     "type": "LATENT",
+     "links": [
+      205
+     ]
+    },
+    {
+     "name": "denoised_output",
+     "type": "LATENT",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SamplerCustomAdvanced",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 117,
+   "type": "VAEDecode",
+   "pos": [
+    760,
+    -800
+   ],
+   "size": [
+    330,
+    50
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 205
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 206
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      207
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecode",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 118,
+   "type": "SaveImage",
+   "pos": [
+    1100,
+    -1240
+   ],
+   "size": [
+    440,
+    620
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 207
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "SaveImage",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "H3test/step_00250"
+   ],
+   "title": "step 250"
+  },
+  {
+   "id": 119,
+   "type": "LoraLoaderModelOnly",
+   "pos": [
+    1560,
+    -1240
+   ],
+   "size": [
+    330,
+    100
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 208
+    },
+    {
+     "name": "strength_model",
+     "type": "FLOAT",
+     "link": 209,
+     "widget": {
+      "name": "strength_model"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      210
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "LoraLoaderModelOnly",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "ine3ss_000000500.safetensors",
+    1.0
+   ],
+   "title": "step 500",
+   "color": "#1f4a2b",
+   "bgcolor": "#2b6a3d"
+  },
+  {
+   "id": 120,
+   "type": "ModelAttentionBackend",
+   "pos": [
+    1560,
+    -1120
+   ],
+   "size": [
+    330,
+    58
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 210
+    }
+   ],
+   "outputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "links": [
+      211
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ModelAttentionBackend",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "comfy kitchen attention"
+   ]
+  },
+  {
+   "id": 121,
+   "type": "BasicGuider",
+   "pos": [
+    1560,
+    -1040
+   ],
+   "size": [
+    330,
+    60
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 211
+    },
+    {
+     "name": "conditioning",
+     "type": "CONDITIONING",
+     "link": 212
+    }
+   ],
+   "outputs": [
+    {
+     "name": "GUIDER",
+     "type": "GUIDER",
+     "links": [
+      214
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "BasicGuider",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 122,
+   "type": "SamplerCustomAdvanced",
+   "pos": [
+    1560,
+    -960
+   ],
+   "size": [
+    330,
+    140
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 213
+    },
+    {
+     "name": "guider",
+     "type": "GUIDER",
+     "link": 214
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 215
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 216
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 217
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output",
+     "type": "LATENT",
+     "links": [
+      218
+     ]
+    },
+    {
+     "name": "denoised_output",
+     "type": "LATENT",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SamplerCustomAdvanced",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 123,
+   "type": "VAEDecode",
+   "pos": [
+    1560,
+    -800
+   ],
+   "size": [
+    330,
+    50
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 218
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 219
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      220
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecode",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 124,
+   "type": "SaveImage",
+   "pos": [
+    1900,
+    -1240
+   ],
+   "size": [
+    440,
+    620
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 220
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "SaveImage",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "H3test/step_00500"
+   ],
+   "title": "step 500"
+  },
+  {
+   "id": 125,
+   "type": "LoraLoaderModelOnly",
+   "pos": [
+    2360,
+    -1240
+   ],
+   "size": [
+    330,
+    100
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 221
+    },
+    {
+     "name": "strength_model",
+     "type": "FLOAT",
+     "link": 222,
+     "widget": {
+      "name": "strength_model"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      223
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "LoraLoaderModelOnly",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "ine3ss_000000750.safetensors",
+    1.0
+   ],
+   "title": "step 750",
+   "color": "#1f4a2b",
+   "bgcolor": "#2b6a3d"
+  },
+  {
+   "id": 126,
+   "type": "ModelAttentionBackend",
+   "pos": [
+    2360,
+    -1120
+   ],
+   "size": [
+    330,
+    58
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 223
+    }
+   ],
+   "outputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "links": [
+      224
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ModelAttentionBackend",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "comfy kitchen attention"
+   ]
+  },
+  {
+   "id": 127,
+   "type": "BasicGuider",
+   "pos": [
+    2360,
+    -1040
+   ],
+   "size": [
+    330,
+    60
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 224
+    },
+    {
+     "name": "conditioning",
+     "type": "CONDITIONING",
+     "link": 225
+    }
+   ],
+   "outputs": [
+    {
+     "name": "GUIDER",
+     "type": "GUIDER",
+     "links": [
+      227
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "BasicGuider",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 128,
+   "type": "SamplerCustomAdvanced",
+   "pos": [
+    2360,
+    -960
+   ],
+   "size": [
+    330,
+    140
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 226
+    },
+    {
+     "name": "guider",
+     "type": "GUIDER",
+     "link": 227
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 228
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 229
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 230
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output",
+     "type": "LATENT",
+     "links": [
+      231
+     ]
+    },
+    {
+     "name": "denoised_output",
+     "type": "LATENT",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SamplerCustomAdvanced",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 129,
+   "type": "VAEDecode",
+   "pos": [
+    2360,
+    -800
+   ],
+   "size": [
+    330,
+    50
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 231
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 232
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      233
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecode",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 130,
+   "type": "SaveImage",
+   "pos": [
+    2700,
+    -1240
+   ],
+   "size": [
+    440,
+    620
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 233
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "SaveImage",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "H3test/step_00750"
+   ],
+   "title": "step 750"
+  },
+  {
+   "id": 131,
+   "type": "LoraLoaderModelOnly",
+   "pos": [
+    3160,
+    -1240
+   ],
+   "size": [
+    330,
+    100
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 234
+    },
+    {
+     "name": "strength_model",
+     "type": "FLOAT",
+     "link": 235,
+     "widget": {
+      "name": "strength_model"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      236
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "LoraLoaderModelOnly",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "ine3ss_000001000.safetensors",
+    1.0
+   ],
+   "title": "step 1000",
+   "color": "#1f4a2b",
+   "bgcolor": "#2b6a3d"
+  },
+  {
+   "id": 132,
+   "type": "ModelAttentionBackend",
+   "pos": [
+    3160,
+    -1120
+   ],
+   "size": [
+    330,
+    58
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 236
+    }
+   ],
+   "outputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "links": [
+      237
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ModelAttentionBackend",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "comfy kitchen attention"
+   ]
+  },
+  {
+   "id": 133,
+   "type": "BasicGuider",
+   "pos": [
+    3160,
+    -1040
+   ],
+   "size": [
+    330,
+    60
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 237
+    },
+    {
+     "name": "conditioning",
+     "type": "CONDITIONING",
+     "link": 238
+    }
+   ],
+   "outputs": [
+    {
+     "name": "GUIDER",
+     "type": "GUIDER",
+     "links": [
+      240
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "BasicGuider",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 134,
+   "type": "SamplerCustomAdvanced",
+   "pos": [
+    3160,
+    -960
+   ],
+   "size": [
+    330,
+    140
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 239
+    },
+    {
+     "name": "guider",
+     "type": "GUIDER",
+     "link": 240
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 241
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 242
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 243
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output",
+     "type": "LATENT",
+     "links": [
+      244
+     ]
+    },
+    {
+     "name": "denoised_output",
+     "type": "LATENT",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SamplerCustomAdvanced",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 135,
+   "type": "VAEDecode",
+   "pos": [
+    3160,
+    -800
+   ],
+   "size": [
+    330,
+    50
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 244
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 245
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      246
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecode",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 136,
+   "type": "SaveImage",
+   "pos": [
+    3500,
+    -1240
+   ],
+   "size": [
+    440,
+    620
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 246
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "SaveImage",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "H3test/step_01000"
+   ],
+   "title": "step 1000"
+  },
+  {
+   "id": 137,
+   "type": "LoraLoaderModelOnly",
+   "pos": [
+    760,
+    -540
+   ],
+   "size": [
+    330,
+    100
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 247
+    },
+    {
+     "name": "strength_model",
+     "type": "FLOAT",
+     "link": 248,
+     "widget": {
+      "name": "strength_model"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      249
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "LoraLoaderModelOnly",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "ine3ss_000001250.safetensors",
+    1.0
+   ],
+   "title": "step 1250",
+   "color": "#1f4a2b",
+   "bgcolor": "#2b6a3d"
+  },
+  {
+   "id": 138,
+   "type": "ModelAttentionBackend",
+   "pos": [
+    760,
+    -420
+   ],
+   "size": [
+    330,
+    58
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 249
+    }
+   ],
+   "outputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "links": [
+      250
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ModelAttentionBackend",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "comfy kitchen attention"
+   ]
+  },
+  {
+   "id": 139,
+   "type": "BasicGuider",
+   "pos": [
+    760,
+    -340
+   ],
+   "size": [
+    330,
+    60
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 250
+    },
+    {
+     "name": "conditioning",
+     "type": "CONDITIONING",
+     "link": 251
+    }
+   ],
+   "outputs": [
+    {
+     "name": "GUIDER",
+     "type": "GUIDER",
+     "links": [
+      253
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "BasicGuider",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 140,
+   "type": "SamplerCustomAdvanced",
+   "pos": [
+    760,
+    -260
+   ],
+   "size": [
+    330,
+    140
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 252
+    },
+    {
+     "name": "guider",
+     "type": "GUIDER",
+     "link": 253
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 254
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 255
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 256
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output",
+     "type": "LATENT",
+     "links": [
+      257
+     ]
+    },
+    {
+     "name": "denoised_output",
+     "type": "LATENT",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SamplerCustomAdvanced",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 141,
+   "type": "VAEDecode",
+   "pos": [
+    760,
+    -100
+   ],
+   "size": [
+    330,
+    50
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 257
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 258
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      259
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecode",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 142,
+   "type": "SaveImage",
+   "pos": [
+    1100,
+    -540
+   ],
+   "size": [
+    440,
+    620
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 259
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "SaveImage",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "H3test/step_01250"
+   ],
+   "title": "step 1250"
+  },
+  {
+   "id": 143,
+   "type": "LoraLoaderModelOnly",
+   "pos": [
+    1560,
+    -540
+   ],
+   "size": [
+    330,
+    100
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 260
+    },
+    {
+     "name": "strength_model",
+     "type": "FLOAT",
+     "link": 261,
+     "widget": {
+      "name": "strength_model"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      262
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "LoraLoaderModelOnly",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "ine3ss_000001500.safetensors",
+    1.0
+   ],
+   "title": "step 1500",
+   "color": "#1f4a2b",
+   "bgcolor": "#2b6a3d"
+  },
+  {
+   "id": 144,
+   "type": "ModelAttentionBackend",
+   "pos": [
+    1560,
+    -420
+   ],
+   "size": [
+    330,
+    58
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 262
+    }
+   ],
+   "outputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "links": [
+      263
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ModelAttentionBackend",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "comfy kitchen attention"
+   ]
+  },
+  {
+   "id": 145,
+   "type": "BasicGuider",
+   "pos": [
+    1560,
+    -340
+   ],
+   "size": [
+    330,
+    60
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 263
+    },
+    {
+     "name": "conditioning",
+     "type": "CONDITIONING",
+     "link": 264
+    }
+   ],
+   "outputs": [
+    {
+     "name": "GUIDER",
+     "type": "GUIDER",
+     "links": [
+      266
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "BasicGuider",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 146,
+   "type": "SamplerCustomAdvanced",
+   "pos": [
+    1560,
+    -260
+   ],
+   "size": [
+    330,
+    140
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 265
+    },
+    {
+     "name": "guider",
+     "type": "GUIDER",
+     "link": 266
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 267
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 268
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 269
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output",
+     "type": "LATENT",
+     "links": [
+      270
+     ]
+    },
+    {
+     "name": "denoised_output",
+     "type": "LATENT",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SamplerCustomAdvanced",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 147,
+   "type": "VAEDecode",
+   "pos": [
+    1560,
+    -100
+   ],
+   "size": [
+    330,
+    50
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 270
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 271
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      272
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecode",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 148,
+   "type": "SaveImage",
+   "pos": [
+    1900,
+    -540
+   ],
+   "size": [
+    440,
+    620
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 272
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "SaveImage",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "H3test/step_01500"
+   ],
+   "title": "step 1500"
+  },
+  {
+   "id": 149,
+   "type": "LoraLoaderModelOnly",
+   "pos": [
+    2360,
+    -540
+   ],
+   "size": [
+    330,
+    100
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 273
+    },
+    {
+     "name": "strength_model",
+     "type": "FLOAT",
+     "link": 274,
+     "widget": {
+      "name": "strength_model"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      275
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "LoraLoaderModelOnly",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "ine3ss_000001750.safetensors",
+    1.0
+   ],
+   "title": "step 1750",
+   "color": "#1f4a2b",
+   "bgcolor": "#2b6a3d"
+  },
+  {
+   "id": 150,
+   "type": "ModelAttentionBackend",
+   "pos": [
+    2360,
+    -420
+   ],
+   "size": [
+    330,
+    58
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 275
+    }
+   ],
+   "outputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "links": [
+      276
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ModelAttentionBackend",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "comfy kitchen attention"
+   ]
+  },
+  {
+   "id": 151,
+   "type": "BasicGuider",
+   "pos": [
+    2360,
+    -340
+   ],
+   "size": [
+    330,
+    60
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 276
+    },
+    {
+     "name": "conditioning",
+     "type": "CONDITIONING",
+     "link": 277
+    }
+   ],
+   "outputs": [
+    {
+     "name": "GUIDER",
+     "type": "GUIDER",
+     "links": [
+      279
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "BasicGuider",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 152,
+   "type": "SamplerCustomAdvanced",
+   "pos": [
+    2360,
+    -260
+   ],
+   "size": [
+    330,
+    140
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 278
+    },
+    {
+     "name": "guider",
+     "type": "GUIDER",
+     "link": 279
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 280
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 281
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 282
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output",
+     "type": "LATENT",
+     "links": [
+      283
+     ]
+    },
+    {
+     "name": "denoised_output",
+     "type": "LATENT",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SamplerCustomAdvanced",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 153,
+   "type": "VAEDecode",
+   "pos": [
+    2360,
+    -100
+   ],
+   "size": [
+    330,
+    50
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 283
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 284
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      285
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecode",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 154,
+   "type": "SaveImage",
+   "pos": [
+    2700,
+    -540
+   ],
+   "size": [
+    440,
+    620
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 285
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "SaveImage",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "H3test/step_01750"
+   ],
+   "title": "step 1750"
+  },
+  {
+   "id": 155,
+   "type": "LoraLoaderModelOnly",
+   "pos": [
+    3160,
+    -540
+   ],
+   "size": [
+    330,
+    100
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 286
+    },
+    {
+     "name": "strength_model",
+     "type": "FLOAT",
+     "link": 287,
+     "widget": {
+      "name": "strength_model"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      288
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "LoraLoaderModelOnly",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "ine3ss_000002000.safetensors",
+    1.0
+   ],
+   "title": "step 2000",
+   "color": "#1f4a2b",
+   "bgcolor": "#2b6a3d"
+  },
+  {
+   "id": 156,
+   "type": "ModelAttentionBackend",
+   "pos": [
+    3160,
+    -420
+   ],
+   "size": [
+    330,
+    58
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 288
+    }
+   ],
+   "outputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "links": [
+      289
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ModelAttentionBackend",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "comfy kitchen attention"
+   ]
+  },
+  {
+   "id": 157,
+   "type": "BasicGuider",
+   "pos": [
+    3160,
+    -340
+   ],
+   "size": [
+    330,
+    60
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 289
+    },
+    {
+     "name": "conditioning",
+     "type": "CONDITIONING",
+     "link": 290
+    }
+   ],
+   "outputs": [
+    {
+     "name": "GUIDER",
+     "type": "GUIDER",
+     "links": [
+      292
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "BasicGuider",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 158,
+   "type": "SamplerCustomAdvanced",
+   "pos": [
+    3160,
+    -260
+   ],
+   "size": [
+    330,
+    140
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 291
+    },
+    {
+     "name": "guider",
+     "type": "GUIDER",
+     "link": 292
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 293
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 294
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 295
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output",
+     "type": "LATENT",
+     "links": [
+      296
+     ]
+    },
+    {
+     "name": "denoised_output",
+     "type": "LATENT",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SamplerCustomAdvanced",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 159,
+   "type": "VAEDecode",
+   "pos": [
+    3160,
+    -100
+   ],
+   "size": [
+    330,
+    50
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 296
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 297
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      298
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecode",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 160,
+   "type": "SaveImage",
+   "pos": [
+    3500,
+    -540
+   ],
+   "size": [
+    440,
+    620
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 298
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "SaveImage",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "H3test/step_02000"
+   ],
+   "title": "step 2000"
+  },
+  {
+   "id": 161,
+   "type": "LoraLoaderModelOnly",
+   "pos": [
+    760,
+    160
+   ],
+   "size": [
+    330,
+    100
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 299
+    },
+    {
+     "name": "strength_model",
+     "type": "FLOAT",
+     "link": 300,
+     "widget": {
+      "name": "strength_model"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      301
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "LoraLoaderModelOnly",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "ine3ss_000002250.safetensors",
+    1.0
+   ],
+   "title": "step 2250",
+   "color": "#1f4a2b",
+   "bgcolor": "#2b6a3d"
+  },
+  {
+   "id": 162,
+   "type": "ModelAttentionBackend",
+   "pos": [
+    760,
+    280
+   ],
+   "size": [
+    330,
+    58
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 301
+    }
+   ],
+   "outputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "links": [
+      302
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ModelAttentionBackend",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "comfy kitchen attention"
+   ]
+  },
+  {
+   "id": 163,
+   "type": "BasicGuider",
+   "pos": [
+    760,
+    360
+   ],
+   "size": [
+    330,
+    60
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 302
+    },
+    {
+     "name": "conditioning",
+     "type": "CONDITIONING",
+     "link": 303
+    }
+   ],
+   "outputs": [
+    {
+     "name": "GUIDER",
+     "type": "GUIDER",
+     "links": [
+      305
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "BasicGuider",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 164,
+   "type": "SamplerCustomAdvanced",
+   "pos": [
+    760,
+    440
+   ],
+   "size": [
+    330,
+    140
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 304
+    },
+    {
+     "name": "guider",
+     "type": "GUIDER",
+     "link": 305
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 306
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 307
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 308
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output",
+     "type": "LATENT",
+     "links": [
+      309
+     ]
+    },
+    {
+     "name": "denoised_output",
+     "type": "LATENT",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SamplerCustomAdvanced",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 165,
+   "type": "VAEDecode",
+   "pos": [
+    760,
+    600
+   ],
+   "size": [
+    330,
+    50
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 309
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 310
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      311
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecode",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 166,
+   "type": "SaveImage",
+   "pos": [
+    1100,
+    160
+   ],
+   "size": [
+    440,
+    620
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 311
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "SaveImage",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "H3test/step_02250"
+   ],
+   "title": "step 2250"
+  },
+  {
+   "id": 167,
+   "type": "LoraLoaderModelOnly",
+   "pos": [
+    1560,
+    160
+   ],
+   "size": [
+    330,
+    100
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 312
+    },
+    {
+     "name": "strength_model",
+     "type": "FLOAT",
+     "link": 313,
+     "widget": {
+      "name": "strength_model"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      314
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "LoraLoaderModelOnly",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "ine3ss_000002500.safetensors",
+    1.0
+   ],
+   "title": "step 2500",
+   "color": "#1f4a2b",
+   "bgcolor": "#2b6a3d"
+  },
+  {
+   "id": 168,
+   "type": "ModelAttentionBackend",
+   "pos": [
+    1560,
+    280
+   ],
+   "size": [
+    330,
+    58
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 314
+    }
+   ],
+   "outputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "links": [
+      315
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ModelAttentionBackend",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "comfy kitchen attention"
+   ]
+  },
+  {
+   "id": 169,
+   "type": "BasicGuider",
+   "pos": [
+    1560,
+    360
+   ],
+   "size": [
+    330,
+    60
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 315
+    },
+    {
+     "name": "conditioning",
+     "type": "CONDITIONING",
+     "link": 316
+    }
+   ],
+   "outputs": [
+    {
+     "name": "GUIDER",
+     "type": "GUIDER",
+     "links": [
+      318
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "BasicGuider",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 170,
+   "type": "SamplerCustomAdvanced",
+   "pos": [
+    1560,
+    440
+   ],
+   "size": [
+    330,
+    140
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 317
+    },
+    {
+     "name": "guider",
+     "type": "GUIDER",
+     "link": 318
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 319
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 320
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 321
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output",
+     "type": "LATENT",
+     "links": [
+      322
+     ]
+    },
+    {
+     "name": "denoised_output",
+     "type": "LATENT",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SamplerCustomAdvanced",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 171,
+   "type": "VAEDecode",
+   "pos": [
+    1560,
+    600
+   ],
+   "size": [
+    330,
+    50
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 322
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 323
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      324
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecode",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 172,
+   "type": "SaveImage",
+   "pos": [
+    1900,
+    160
+   ],
+   "size": [
+    440,
+    620
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 324
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "SaveImage",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "H3test/step_02500"
+   ],
+   "title": "step 2500"
+  },
+  {
+   "id": 173,
+   "type": "LoraLoaderModelOnly",
+   "pos": [
+    2360,
+    160
+   ],
+   "size": [
+    330,
+    100
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 325
+    },
+    {
+     "name": "strength_model",
+     "type": "FLOAT",
+     "link": 326,
+     "widget": {
+      "name": "strength_model"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      327
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "LoraLoaderModelOnly",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "ine3ss_000002750.safetensors",
+    1.0
+   ],
+   "title": "step 2750",
+   "color": "#1f4a2b",
+   "bgcolor": "#2b6a3d"
+  },
+  {
+   "id": 174,
+   "type": "ModelAttentionBackend",
+   "pos": [
+    2360,
+    280
+   ],
+   "size": [
+    330,
+    58
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 327
+    }
+   ],
+   "outputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "links": [
+      328
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ModelAttentionBackend",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "comfy kitchen attention"
+   ]
+  },
+  {
+   "id": 175,
+   "type": "BasicGuider",
+   "pos": [
+    2360,
+    360
+   ],
+   "size": [
+    330,
+    60
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 328
+    },
+    {
+     "name": "conditioning",
+     "type": "CONDITIONING",
+     "link": 329
+    }
+   ],
+   "outputs": [
+    {
+     "name": "GUIDER",
+     "type": "GUIDER",
+     "links": [
+      331
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "BasicGuider",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 176,
+   "type": "SamplerCustomAdvanced",
+   "pos": [
+    2360,
+    440
+   ],
+   "size": [
+    330,
+    140
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 330
+    },
+    {
+     "name": "guider",
+     "type": "GUIDER",
+     "link": 331
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 332
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 333
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 334
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output",
+     "type": "LATENT",
+     "links": [
+      335
+     ]
+    },
+    {
+     "name": "denoised_output",
+     "type": "LATENT",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SamplerCustomAdvanced",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 177,
+   "type": "VAEDecode",
+   "pos": [
+    2360,
+    600
+   ],
+   "size": [
+    330,
+    50
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 335
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 336
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      337
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecode",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 178,
+   "type": "SaveImage",
+   "pos": [
+    2700,
+    160
+   ],
+   "size": [
+    440,
+    620
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 337
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "SaveImage",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "H3test/step_02750"
+   ],
+   "title": "step 2750"
+  },
+  {
+   "id": 179,
+   "type": "LoraLoaderModelOnly",
+   "pos": [
+    3160,
+    160
+   ],
+   "size": [
+    330,
+    100
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 338
+    },
+    {
+     "name": "strength_model",
+     "type": "FLOAT",
+     "link": 339,
+     "widget": {
+      "name": "strength_model"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      340
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "LoraLoaderModelOnly",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "ine3ss.safetensors",
+    1.0
+   ],
+   "title": "step 3000",
+   "color": "#1f4a2b",
+   "bgcolor": "#2b6a3d"
+  },
+  {
+   "id": 180,
+   "type": "ModelAttentionBackend",
+   "pos": [
+    3160,
+    280
+   ],
+   "size": [
+    330,
+    58
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 340
+    }
+   ],
+   "outputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "links": [
+      341
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ModelAttentionBackend",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "comfy kitchen attention"
+   ]
+  },
+  {
+   "id": 181,
+   "type": "BasicGuider",
+   "pos": [
+    3160,
+    360
+   ],
+   "size": [
+    330,
+    60
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 341
+    },
+    {
+     "name": "conditioning",
+     "type": "CONDITIONING",
+     "link": 342
+    }
+   ],
+   "outputs": [
+    {
+     "name": "GUIDER",
+     "type": "GUIDER",
+     "links": [
+      344
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "BasicGuider",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 182,
+   "type": "SamplerCustomAdvanced",
+   "pos": [
+    3160,
+    440
+   ],
+   "size": [
+    330,
+    140
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 343
+    },
+    {
+     "name": "guider",
+     "type": "GUIDER",
+     "link": 344
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 345
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 346
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 347
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output",
+     "type": "LATENT",
+     "links": [
+      348
+     ]
+    },
+    {
+     "name": "denoised_output",
+     "type": "LATENT",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SamplerCustomAdvanced",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 183,
+   "type": "VAEDecode",
+   "pos": [
+    3160,
+    600
+   ],
+   "size": [
+    330,
+    50
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 348
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 349
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      350
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecode",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 184,
+   "type": "SaveImage",
+   "pos": [
+    3500,
+    160
+   ],
+   "size": [
+    440,
+    620
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 350
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "SaveImage",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "H3test/step_03000"
+   ],
+   "title": "step 3000"
+  },
+  {
+   "id": 185,
+   "type": "MarkdownNote",
+   "pos": [
+    -1130,
+    -1700
+   ],
+   "size": [
+    1100,
+    400
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [],
+   "properties": {},
+   "widgets_values": [
+    "# H3 LoRA tester\nRenders **the same prompt, seed, size and reference** through 12 checkpoints, one per box. Compare the 12 images side by side.\n\n1. Put the AI Toolkit files in `ComfyUI/models/loras` (job `ine3ss` saves `ine3ss_000000250.safetensors` ... every 250 steps; the last one is `ine3ss.safetensors`).\n2. Pick the file in each green `step N` box (type the number, or use the dropdown). Names that differ from yours need re-picking.\n3. Stopped early or fewer files? **Mute the `step N` SaveImage** (Ctrl+M) of the boxes you don't have; muted branches don't run.\n4. Strength for all 12 is the green slider on the left (1.0). Re-run at 0.7-0.9 if the best step still looks over-baked.\n5. Prompt = the two boxes on the left (look + shot). Same words every time, so only the checkpoint changes. Change the seed only if you want a second pass.\n\n**What to look for:** early steps = face not locked yet; middle = identity + skin right; late = plastic skin, hair streaks bleeding, same pose every time (overfit). Pick the earliest step where the face is stable. Then test that one on 2-3 different prompts.\nImages are saved in `output/H3test/`."
+   ],
+   "title": "READ ME · Model 2 · MiniMax H3 LoRA tester",
+   "color": "#432",
+   "bgcolor": "#653"
+  }
+ ],
+ "links": [
+  [
+   165,
+   79,
+   0,
+   67,
+   0,
+   "CLIP"
+  ],
+  [
+   105,
+   3,
+   0,
+   67,
+   1,
+   "VAE"
+  ],
+  [
+   116,
+   56,
+   0,
+   67,
+   2,
+   "IMAGE"
+  ],
+  [
+   106,
+   57,
+   1,
+   67,
+   8,
+   "INT"
+  ],
+  [
+   107,
+   57,
+   2,
+   67,
+   9,
+   "INT"
+  ],
+  [
+   191,
+   108,
+   0,
+   110,
+   0,
+   "STRING"
+  ],
+  [
+   192,
+   109,
+   0,
+   110,
+   1,
+   "STRING"
+  ],
+  [
+   193,
+   110,
+   0,
+   67,
+   7,
+   "STRING"
+  ],
+  [
+   194,
+   1,
+   0,
+   68,
+   0,
+   "MODEL"
+  ],
+  [
+   195,
+   1,
+   0,
+   113,
+   0,
+   "MODEL"
+  ],
+  [
+   196,
+   112,
+   0,
+   113,
+   1,
+   "FLOAT"
+  ],
+  [
+   197,
+   113,
+   0,
+   114,
+   0,
+   "MODEL"
+  ],
+  [
+   198,
+   114,
+   0,
+   115,
+   0,
+   "MODEL"
+  ],
+  [
+   199,
+   67,
+   0,
+   115,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   200,
+   89,
+   0,
+   116,
+   0,
+   "NOISE"
+  ],
+  [
+   201,
+   115,
+   0,
+   116,
+   1,
+   "GUIDER"
+  ],
+  [
+   202,
+   11,
+   0,
+   116,
+   2,
+   "SAMPLER"
+  ],
+  [
+   203,
+   68,
+   0,
+   116,
+   3,
+   "SIGMAS"
+  ],
+  [
+   204,
+   67,
+   1,
+   116,
+   4,
+   "LATENT"
+  ],
+  [
+   205,
+   116,
+   0,
+   117,
+   0,
+   "LATENT"
+  ],
+  [
+   206,
+   3,
+   0,
+   117,
+   1,
+   "VAE"
+  ],
+  [
+   207,
+   117,
+   0,
+   118,
+   0,
+   "IMAGE"
+  ],
+  [
+   208,
+   1,
+   0,
+   119,
+   0,
+   "MODEL"
+  ],
+  [
+   209,
+   112,
+   0,
+   119,
+   1,
+   "FLOAT"
+  ],
+  [
+   210,
+   119,
+   0,
+   120,
+   0,
+   "MODEL"
+  ],
+  [
+   211,
+   120,
+   0,
+   121,
+   0,
+   "MODEL"
+  ],
+  [
+   212,
+   67,
+   0,
+   121,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   213,
+   89,
+   0,
+   122,
+   0,
+   "NOISE"
+  ],
+  [
+   214,
+   121,
+   0,
+   122,
+   1,
+   "GUIDER"
+  ],
+  [
+   215,
+   11,
+   0,
+   122,
+   2,
+   "SAMPLER"
+  ],
+  [
+   216,
+   68,
+   0,
+   122,
+   3,
+   "SIGMAS"
+  ],
+  [
+   217,
+   67,
+   1,
+   122,
+   4,
+   "LATENT"
+  ],
+  [
+   218,
+   122,
+   0,
+   123,
+   0,
+   "LATENT"
+  ],
+  [
+   219,
+   3,
+   0,
+   123,
+   1,
+   "VAE"
+  ],
+  [
+   220,
+   123,
+   0,
+   124,
+   0,
+   "IMAGE"
+  ],
+  [
+   221,
+   1,
+   0,
+   125,
+   0,
+   "MODEL"
+  ],
+  [
+   222,
+   112,
+   0,
+   125,
+   1,
+   "FLOAT"
+  ],
+  [
+   223,
+   125,
+   0,
+   126,
+   0,
+   "MODEL"
+  ],
+  [
+   224,
+   126,
+   0,
+   127,
+   0,
+   "MODEL"
+  ],
+  [
+   225,
+   67,
+   0,
+   127,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   226,
+   89,
+   0,
+   128,
+   0,
+   "NOISE"
+  ],
+  [
+   227,
+   127,
+   0,
+   128,
+   1,
+   "GUIDER"
+  ],
+  [
+   228,
+   11,
+   0,
+   128,
+   2,
+   "SAMPLER"
+  ],
+  [
+   229,
+   68,
+   0,
+   128,
+   3,
+   "SIGMAS"
+  ],
+  [
+   230,
+   67,
+   1,
+   128,
+   4,
+   "LATENT"
+  ],
+  [
+   231,
+   128,
+   0,
+   129,
+   0,
+   "LATENT"
+  ],
+  [
+   232,
+   3,
+   0,
+   129,
+   1,
+   "VAE"
+  ],
+  [
+   233,
+   129,
+   0,
+   130,
+   0,
+   "IMAGE"
+  ],
+  [
+   234,
+   1,
+   0,
+   131,
+   0,
+   "MODEL"
+  ],
+  [
+   235,
+   112,
+   0,
+   131,
+   1,
+   "FLOAT"
+  ],
+  [
+   236,
+   131,
+   0,
+   132,
+   0,
+   "MODEL"
+  ],
+  [
+   237,
+   132,
+   0,
+   133,
+   0,
+   "MODEL"
+  ],
+  [
+   238,
+   67,
+   0,
+   133,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   239,
+   89,
+   0,
+   134,
+   0,
+   "NOISE"
+  ],
+  [
+   240,
+   133,
+   0,
+   134,
+   1,
+   "GUIDER"
+  ],
+  [
+   241,
+   11,
+   0,
+   134,
+   2,
+   "SAMPLER"
+  ],
+  [
+   242,
+   68,
+   0,
+   134,
+   3,
+   "SIGMAS"
+  ],
+  [
+   243,
+   67,
+   1,
+   134,
+   4,
+   "LATENT"
+  ],
+  [
+   244,
+   134,
+   0,
+   135,
+   0,
+   "LATENT"
+  ],
+  [
+   245,
+   3,
+   0,
+   135,
+   1,
+   "VAE"
+  ],
+  [
+   246,
+   135,
+   0,
+   136,
+   0,
+   "IMAGE"
+  ],
+  [
+   247,
+   1,
+   0,
+   137,
+   0,
+   "MODEL"
+  ],
+  [
+   248,
+   112,
+   0,
+   137,
+   1,
+   "FLOAT"
+  ],
+  [
+   249,
+   137,
+   0,
+   138,
+   0,
+   "MODEL"
+  ],
+  [
+   250,
+   138,
+   0,
+   139,
+   0,
+   "MODEL"
+  ],
+  [
+   251,
+   67,
+   0,
+   139,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   252,
+   89,
+   0,
+   140,
+   0,
+   "NOISE"
+  ],
+  [
+   253,
+   139,
+   0,
+   140,
+   1,
+   "GUIDER"
+  ],
+  [
+   254,
+   11,
+   0,
+   140,
+   2,
+   "SAMPLER"
+  ],
+  [
+   255,
+   68,
+   0,
+   140,
+   3,
+   "SIGMAS"
+  ],
+  [
+   256,
+   67,
+   1,
+   140,
+   4,
+   "LATENT"
+  ],
+  [
+   257,
+   140,
+   0,
+   141,
+   0,
+   "LATENT"
+  ],
+  [
+   258,
+   3,
+   0,
+   141,
+   1,
+   "VAE"
+  ],
+  [
+   259,
+   141,
+   0,
+   142,
+   0,
+   "IMAGE"
+  ],
+  [
+   260,
+   1,
+   0,
+   143,
+   0,
+   "MODEL"
+  ],
+  [
+   261,
+   112,
+   0,
+   143,
+   1,
+   "FLOAT"
+  ],
+  [
+   262,
+   143,
+   0,
+   144,
+   0,
+   "MODEL"
+  ],
+  [
+   263,
+   144,
+   0,
+   145,
+   0,
+   "MODEL"
+  ],
+  [
+   264,
+   67,
+   0,
+   145,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   265,
+   89,
+   0,
+   146,
+   0,
+   "NOISE"
+  ],
+  [
+   266,
+   145,
+   0,
+   146,
+   1,
+   "GUIDER"
+  ],
+  [
+   267,
+   11,
+   0,
+   146,
+   2,
+   "SAMPLER"
+  ],
+  [
+   268,
+   68,
+   0,
+   146,
+   3,
+   "SIGMAS"
+  ],
+  [
+   269,
+   67,
+   1,
+   146,
+   4,
+   "LATENT"
+  ],
+  [
+   270,
+   146,
+   0,
+   147,
+   0,
+   "LATENT"
+  ],
+  [
+   271,
+   3,
+   0,
+   147,
+   1,
+   "VAE"
+  ],
+  [
+   272,
+   147,
+   0,
+   148,
+   0,
+   "IMAGE"
+  ],
+  [
+   273,
+   1,
+   0,
+   149,
+   0,
+   "MODEL"
+  ],
+  [
+   274,
+   112,
+   0,
+   149,
+   1,
+   "FLOAT"
+  ],
+  [
+   275,
+   149,
+   0,
+   150,
+   0,
+   "MODEL"
+  ],
+  [
+   276,
+   150,
+   0,
+   151,
+   0,
+   "MODEL"
+  ],
+  [
+   277,
+   67,
+   0,
+   151,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   278,
+   89,
+   0,
+   152,
+   0,
+   "NOISE"
+  ],
+  [
+   279,
+   151,
+   0,
+   152,
+   1,
+   "GUIDER"
+  ],
+  [
+   280,
+   11,
+   0,
+   152,
+   2,
+   "SAMPLER"
+  ],
+  [
+   281,
+   68,
+   0,
+   152,
+   3,
+   "SIGMAS"
+  ],
+  [
+   282,
+   67,
+   1,
+   152,
+   4,
+   "LATENT"
+  ],
+  [
+   283,
+   152,
+   0,
+   153,
+   0,
+   "LATENT"
+  ],
+  [
+   284,
+   3,
+   0,
+   153,
+   1,
+   "VAE"
+  ],
+  [
+   285,
+   153,
+   0,
+   154,
+   0,
+   "IMAGE"
+  ],
+  [
+   286,
+   1,
+   0,
+   155,
+   0,
+   "MODEL"
+  ],
+  [
+   287,
+   112,
+   0,
+   155,
+   1,
+   "FLOAT"
+  ],
+  [
+   288,
+   155,
+   0,
+   156,
+   0,
+   "MODEL"
+  ],
+  [
+   289,
+   156,
+   0,
+   157,
+   0,
+   "MODEL"
+  ],
+  [
+   290,
+   67,
+   0,
+   157,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   291,
+   89,
+   0,
+   158,
+   0,
+   "NOISE"
+  ],
+  [
+   292,
+   157,
+   0,
+   158,
+   1,
+   "GUIDER"
+  ],
+  [
+   293,
+   11,
+   0,
+   158,
+   2,
+   "SAMPLER"
+  ],
+  [
+   294,
+   68,
+   0,
+   158,
+   3,
+   "SIGMAS"
+  ],
+  [
+   295,
+   67,
+   1,
+   158,
+   4,
+   "LATENT"
+  ],
+  [
+   296,
+   158,
+   0,
+   159,
+   0,
+   "LATENT"
+  ],
+  [
+   297,
+   3,
+   0,
+   159,
+   1,
+   "VAE"
+  ],
+  [
+   298,
+   159,
+   0,
+   160,
+   0,
+   "IMAGE"
+  ],
+  [
+   299,
+   1,
+   0,
+   161,
+   0,
+   "MODEL"
+  ],
+  [
+   300,
+   112,
+   0,
+   161,
+   1,
+   "FLOAT"
+  ],
+  [
+   301,
+   161,
+   0,
+   162,
+   0,
+   "MODEL"
+  ],
+  [
+   302,
+   162,
+   0,
+   163,
+   0,
+   "MODEL"
+  ],
+  [
+   303,
+   67,
+   0,
+   163,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   304,
+   89,
+   0,
+   164,
+   0,
+   "NOISE"
+  ],
+  [
+   305,
+   163,
+   0,
+   164,
+   1,
+   "GUIDER"
+  ],
+  [
+   306,
+   11,
+   0,
+   164,
+   2,
+   "SAMPLER"
+  ],
+  [
+   307,
+   68,
+   0,
+   164,
+   3,
+   "SIGMAS"
+  ],
+  [
+   308,
+   67,
+   1,
+   164,
+   4,
+   "LATENT"
+  ],
+  [
+   309,
+   164,
+   0,
+   165,
+   0,
+   "LATENT"
+  ],
+  [
+   310,
+   3,
+   0,
+   165,
+   1,
+   "VAE"
+  ],
+  [
+   311,
+   165,
+   0,
+   166,
+   0,
+   "IMAGE"
+  ],
+  [
+   312,
+   1,
+   0,
+   167,
+   0,
+   "MODEL"
+  ],
+  [
+   313,
+   112,
+   0,
+   167,
+   1,
+   "FLOAT"
+  ],
+  [
+   314,
+   167,
+   0,
+   168,
+   0,
+   "MODEL"
+  ],
+  [
+   315,
+   168,
+   0,
+   169,
+   0,
+   "MODEL"
+  ],
+  [
+   316,
+   67,
+   0,
+   169,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   317,
+   89,
+   0,
+   170,
+   0,
+   "NOISE"
+  ],
+  [
+   318,
+   169,
+   0,
+   170,
+   1,
+   "GUIDER"
+  ],
+  [
+   319,
+   11,
+   0,
+   170,
+   2,
+   "SAMPLER"
+  ],
+  [
+   320,
+   68,
+   0,
+   170,
+   3,
+   "SIGMAS"
+  ],
+  [
+   321,
+   67,
+   1,
+   170,
+   4,
+   "LATENT"
+  ],
+  [
+   322,
+   170,
+   0,
+   171,
+   0,
+   "LATENT"
+  ],
+  [
+   323,
+   3,
+   0,
+   171,
+   1,
+   "VAE"
+  ],
+  [
+   324,
+   171,
+   0,
+   172,
+   0,
+   "IMAGE"
+  ],
+  [
+   325,
+   1,
+   0,
+   173,
+   0,
+   "MODEL"
+  ],
+  [
+   326,
+   112,
+   0,
+   173,
+   1,
+   "FLOAT"
+  ],
+  [
+   327,
+   173,
+   0,
+   174,
+   0,
+   "MODEL"
+  ],
+  [
+   328,
+   174,
+   0,
+   175,
+   0,
+   "MODEL"
+  ],
+  [
+   329,
+   67,
+   0,
+   175,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   330,
+   89,
+   0,
+   176,
+   0,
+   "NOISE"
+  ],
+  [
+   331,
+   175,
+   0,
+   176,
+   1,
+   "GUIDER"
+  ],
+  [
+   332,
+   11,
+   0,
+   176,
+   2,
+   "SAMPLER"
+  ],
+  [
+   333,
+   68,
+   0,
+   176,
+   3,
+   "SIGMAS"
+  ],
+  [
+   334,
+   67,
+   1,
+   176,
+   4,
+   "LATENT"
+  ],
+  [
+   335,
+   176,
+   0,
+   177,
+   0,
+   "LATENT"
+  ],
+  [
+   336,
+   3,
+   0,
+   177,
+   1,
+   "VAE"
+  ],
+  [
+   337,
+   177,
+   0,
+   178,
+   0,
+   "IMAGE"
+  ],
+  [
+   338,
+   1,
+   0,
+   179,
+   0,
+   "MODEL"
+  ],
+  [
+   339,
+   112,
+   0,
+   179,
+   1,
+   "FLOAT"
+  ],
+  [
+   340,
+   179,
+   0,
+   180,
+   0,
+   "MODEL"
+  ],
+  [
+   341,
+   180,
+   0,
+   181,
+   0,
+   "MODEL"
+  ],
+  [
+   342,
+   67,
+   0,
+   181,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   343,
+   89,
+   0,
+   182,
+   0,
+   "NOISE"
+  ],
+  [
+   344,
+   181,
+   0,
+   182,
+   1,
+   "GUIDER"
+  ],
+  [
+   345,
+   11,
+   0,
+   182,
+   2,
+   "SAMPLER"
+  ],
+  [
+   346,
+   68,
+   0,
+   182,
+   3,
+   "SIGMAS"
+  ],
+  [
+   347,
+   67,
+   1,
+   182,
+   4,
+   "LATENT"
+  ],
+  [
+   348,
+   182,
+   0,
+   183,
+   0,
+   "LATENT"
+  ],
+  [
+   349,
+   3,
+   0,
+   183,
+   1,
+   "VAE"
+  ],
+  [
+   350,
+   183,
+   0,
+   184,
+   0,
+   "IMAGE"
+  ]
+ ],
+ "groups": [
+  {
+   "id": 7,
+   "title": "H3 LoRA tester",
+   "bounding": [
+    -1150,
+    -1260,
+    4360,
+    2520
+   ],
+   "color": "#3f789e",
+   "flags": {}
+  }
+ ],
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.28,
+   "offset": [
+    1200,
+    1500
+   ]
+  },
+  "frontendVersion": "1.58.5",
+  "VHS_latentpreview": false,
+  "VHS_latentpreviewrate": 0,
+  "VHS_MetadataImage": true,
+  "VHS_KeepIntermediate": true,
+  "ue_links": [],
+  "links_added_by_ue": []
+ },
+ "extensions": {
+  "widget_idx_map": {
+   "11": {
+    "sampler_name": 0
+   },
+   "12": {
+    "noise_seed": 0
+   },
+   "47": {
+    "seed": 0,
+    "sampler_name": 4,
+    "scheduler": 5
+   }
+  },
+  "seed_widgets": {
+   "12": 0,
+   "47": 0
+  }
+ },
+ "version": 0.4
+}

@@ -1,0 +1,1278 @@
+{
+ "id": "285ea67f-cb59-5e88-aad9-ad85c6802f39",
+ "revision": 0,
+ "last_node_id": 111,
+ "last_link_id": 193,
+ "nodes": [
+  {
+   "id": 1,
+   "type": "UNETLoader",
+   "pos": [
+    -494.8068140516067,
+    -766.0898467720438
+   ],
+   "size": [
+    420,
+    90
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      190
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.43.0",
+    "Node name for S&R": "UNETLoader",
+    "models": [
+     {
+      "name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+      "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+      "directory": "diffusion_models"
+     }
+    ],
+    "ue_properties": {
+     "widget_ue_connectable": {},
+     "version": "8.0.1",
+     "input_ue_unconnectable": {}
+    }
+   },
+   "widgets_values": [
+    "minimax_h3_image_pruned_int8_convrot.safetensors",
+    "default"
+   ],
+   "widgets_values_named": {
+    "unet_name": "minimax_h3_image_pruned_int8_convrot.safetensors",
+    "weight_dtype": "default"
+   }
+  },
+  {
+   "id": 3,
+   "type": "VAELoader",
+   "pos": [
+    -490.06585139245635,
+    -590.3420020432973
+   ],
+   "size": [
+    420,
+    60
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "VAE",
+     "type": "VAE",
+     "links": [
+      18,
+      105
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.43.0",
+    "Node name for S&R": "VAELoader",
+    "models": [
+     {
+      "name": "p-h3-image_vae_int8_convrot.safetensors",
+      "url": "https://huggingface.co/PrunaAI/p-h3-image-comfy/resolve/main/vae/p-h3-image_vae_int8_convrot.safetensors",
+      "directory": "vae"
+     }
+    ],
+    "ue_properties": {
+     "widget_ue_connectable": {},
+     "version": "8.0.1",
+     "input_ue_unconnectable": {}
+    }
+   },
+   "widgets_values": [
+    "minimax_h3_image_vae_fp16.safetensors"
+   ],
+   "widgets_values_named": {
+    "vae_name": "minimax_h3_image_vae_fp16.safetensors"
+   }
+  },
+  {
+   "id": 10,
+   "type": "BasicGuider",
+   "pos": [
+    1177.5008868290372,
+    -770.5897428914104
+   ],
+   "size": [
+    249.20603136590262,
+    60.48799535319961
+   ],
+   "flags": {},
+   "order": 12,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 114
+    },
+    {
+     "name": "conditioning",
+     "type": "CONDITIONING",
+     "link": 109
+    }
+   ],
+   "outputs": [
+    {
+     "name": "GUIDER",
+     "type": "GUIDER",
+     "links": [
+      13
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.43.0",
+    "Node name for S&R": "BasicGuider",
+    "ue_properties": {
+     "widget_ue_connectable": {},
+     "version": "8.0.1",
+     "input_ue_unconnectable": {}
+    }
+   }
+  },
+  {
+   "id": 11,
+   "type": "KSamplerSelect",
+   "pos": [
+    1164.229667476896,
+    -660.3310268877066
+   ],
+   "size": [
+    266.64232364059717,
+    80.18939105490927
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "SAMPLER",
+     "type": "SAMPLER",
+     "links": [
+      14
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.43.0",
+    "Node name for S&R": "KSamplerSelect",
+    "ue_properties": {
+     "widget_ue_connectable": {},
+     "version": "8.0.1",
+     "input_ue_unconnectable": {}
+    }
+   },
+   "widgets_values": [
+    "lcm"
+   ],
+   "widgets_values_named": {
+    "sampler_name": "lcm"
+   }
+  },
+  {
+   "id": 14,
+   "type": "SamplerCustomAdvanced",
+   "pos": [
+    1161.8202307898125,
+    -376.0574456137662
+   ],
+   "size": [
+    276.55499709574974,
+    138.77610687640913
+   ],
+   "flags": {},
+   "order": 13,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 164
+    },
+    {
+     "name": "guider",
+     "type": "GUIDER",
+     "link": 13
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 14
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 132
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 108
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output",
+     "type": "LATENT",
+     "links": [
+      17
+     ]
+    },
+    {
+     "name": "denoised_output",
+     "type": "LATENT",
+     "links": []
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.43.0",
+    "Node name for S&R": "SamplerCustomAdvanced",
+    "ue_properties": {
+     "widget_ue_connectable": {},
+     "version": "8.0.1",
+     "input_ue_unconnectable": {}
+    }
+   }
+  },
+  {
+   "id": 15,
+   "type": "VAEDecode",
+   "pos": [
+    1175.5657213989778,
+    60.858560827767775
+   ],
+   "size": [
+    210,
+    50
+   ],
+   "flags": {},
+   "order": 14,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 17
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 18
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      19
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.43.0",
+    "Node name for S&R": "VAEDecode",
+    "ue_properties": {
+     "widget_ue_connectable": {},
+     "version": "8.0.1",
+     "input_ue_unconnectable": {}
+    }
+   }
+  },
+  {
+   "id": 16,
+   "type": "SaveImage",
+   "pos": [
+    1516.2067245473709,
+    -1196.0161411410786
+   ],
+   "size": [
+    1303.6590000710776,
+    1869.4098459443196
+   ],
+   "flags": {},
+   "order": 15,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 19
+    }
+   ],
+   "outputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "links": []
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.43.0",
+    "Node name for S&R": "SaveImage",
+    "ue_properties": {
+     "widget_ue_connectable": {},
+     "version": "8.0.1",
+     "input_ue_unconnectable": {}
+    }
+   },
+   "widgets_values": [
+    "H3_Model2"
+   ],
+   "widgets_values_named": {
+    "filename_prefix": "image_p_h3_image_edit"
+   }
+  },
+  {
+   "id": 55,
+   "type": "ModelAttentionBackend",
+   "pos": [
+    -495.7624343219802,
+    -288.7850299357212
+   ],
+   "size": [
+    270,
+    58
+   ],
+   "flags": {},
+   "order": 8,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 189
+    }
+   ],
+   "outputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "links": [
+      187
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.43.0",
+    "Node name for S&R": "ModelAttentionBackend",
+    "ue_properties": {
+     "version": "8.0.1",
+     "widget_ue_connectable": {},
+     "input_ue_unconnectable": {},
+     "title_regex": null,
+     "input_regex": null,
+     "group_regex": null,
+     "title_regex_invert": false,
+     "input_regex_invert": false,
+     "group_regex_invert": false,
+     "apply_to_unrepeated": 0,
+     "send_to_any": 0,
+     "string_to_combo": 0,
+     "repeated_type_rule": 0,
+     "group_restricted": 0,
+     "color_restricted": 0
+    }
+   },
+   "widgets_values": [
+    "comfy kitchen attention"
+   ],
+   "widgets_values_named": {
+    "attention": "comfy kitchen attention"
+   }
+  },
+  {
+   "id": 56,
+   "type": "IcyImageLoader",
+   "pos": [
+    -1670.2574110790324,
+    -1164.98365431725
+   ],
+   "size": [
+    1145.1587180459887,
+    1857.2636459942241
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      116
+     ]
+    },
+    {
+     "name": "MASK",
+     "type": "MASK",
+     "links": null
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "IcyImageLoader"
+   },
+   "widgets_values": [
+    "input",
+    "model2_anchor.png",
+    "image",
+    "gallery"
+   ],
+   "widgets_values_named": {
+    "folder": "input",
+    "image": "comfyui_02050.jpg",
+    "upload": "image",
+    "🖼️ Open Gallery": "gallery"
+   },
+   "title": "Picture 1 = her anchor (upload model2_anchor.png to ComfyUI/input)"
+  },
+  {
+   "id": 57,
+   "type": "IcyMegapixelResize",
+   "pos": [
+    13.136828289712465,
+    -476.9646237327196
+   ],
+   "size": [
+    270,
+    170
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "image",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": []
+    },
+    {
+     "name": "width",
+     "type": "INT",
+     "links": [
+      106
+     ]
+    },
+    {
+     "name": "height",
+     "type": "INT",
+     "links": [
+      107
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "IcyMegapixelResize",
+    "ue_properties": {
+     "version": "8.0.1",
+     "widget_ue_connectable": {},
+     "input_ue_unconnectable": {},
+     "title_regex": null,
+     "input_regex": null,
+     "group_regex": null,
+     "title_regex_invert": false,
+     "input_regex_invert": false,
+     "group_regex_invert": false,
+     "apply_to_unrepeated": 0,
+     "send_to_any": 0,
+     "string_to_combo": 0,
+     "repeated_type_rule": 0,
+     "group_restricted": 0,
+     "color_restricted": 0
+    }
+   },
+   "widgets_values": [
+    2.0,
+    "nearest-exact",
+    32,
+    "9:16"
+   ],
+   "widgets_values_named": {
+    "megapixels": 8,
+    "upscale_method": "nearest-exact",
+    "divisible_by": 32,
+    "aspect_ratio": "2:3"
+   },
+   "title": "size: megapixels + aspect (2.0 MP, 9:16)"
+  },
+  {
+   "id": 58,
+   "type": "ModelPreviewOverrideKJ",
+   "pos": [
+    693.1630856763917,
+    -785.5195219831625
+   ],
+   "size": [
+    408.4145499252554,
+    989.187507834584
+   ],
+   "flags": {},
+   "order": 10,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 187
+    },
+    {
+     "name": "vae",
+     "shape": 7,
+     "type": "VAE",
+     "link": null
+    },
+    {
+     "name": "audio_vae",
+     "shape": 7,
+     "type": "VAE",
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      113,
+      114
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfyui_fearnworksnodes",
+    "ver": "0.1.2",
+    "Node name for S&R": "ModelPreviewOverrideKJ"
+   },
+   "widgets_values": [
+    1024,
+    80,
+    true,
+    1,
+    12,
+    "taeh3.safetensors",
+    ""
+   ],
+   "widgets_values_named": {
+    "max_resolution": 1024,
+    "jpeg_quality": 80,
+    "suppress_default_preview": true,
+    "preview_frames": 1,
+    "preview_fps": 12,
+    "tiny_vae": "taeh3.safetensors",
+    "preview": ""
+   }
+  },
+  {
+   "id": 67,
+   "type": "MiniMaxH3ImageConditioning",
+   "pos": [
+    10.620961387957422,
+    -764.3431411356873
+   ],
+   "size": [
+    495.6053332292506,
+    256
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "clip",
+     "type": "CLIP",
+     "link": 165
+    },
+    {
+     "name": "vae",
+     "shape": 7,
+     "type": "VAE",
+     "link": 105
+    },
+    {
+     "name": "images.image_0",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": 116
+    },
+    {
+     "name": "images.image_1",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": null
+    },
+    {
+     "name": "images.image_2",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": null
+    },
+    {
+     "name": "images.image_3",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": null
+    },
+    {
+     "name": "images.image_4",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": null
+    },
+    {
+     "name": "prompt",
+     "type": "STRING",
+     "widget": {
+      "name": "prompt"
+     },
+     "link": 193
+    },
+    {
+     "name": "width",
+     "type": "INT",
+     "widget": {
+      "name": "width"
+     },
+     "link": 106
+    },
+    {
+     "name": "height",
+     "type": "INT",
+     "widget": {
+      "name": "height"
+     },
+     "link": 107
+    }
+   ],
+   "outputs": [
+    {
+     "name": "positive",
+     "type": "CONDITIONING",
+     "links": [
+      109
+     ]
+    },
+    {
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      108
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.44.0",
+    "Node name for S&R": "MiniMaxH3ImageConditioning"
+   },
+   "widgets_values": [
+    "",
+    0,
+    0
+   ],
+   "widgets_values_named": {
+    "prompt": "Full-body front view of a woman standing against a clean white backdrop in a candid, natural pose, wearing a black tank top and jeans.\n\nFull-body back view of a woman standing in front of a plain white backdrop, candidly captured; she is wearing a black tank top and jeans.\n\nFrontal headshot of a woman with shoulder-length hair, wearing a black tank top and jeans, captured in a candid style against a clean white backdrop.",
+    "width": 0,
+    "height": 0
+   }
+  },
+  {
+   "id": 68,
+   "type": "BasicScheduler",
+   "pos": [
+    1157.583573338341,
+    -540.3756622228298
+   ],
+   "size": [
+    231.0633172512462,
+    106
+   ],
+   "flags": {},
+   "order": 11,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 113
+    }
+   ],
+   "outputs": [
+    {
+     "name": "SIGMAS",
+     "type": "SIGMAS",
+     "links": [
+      132
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.44.0",
+    "Node name for S&R": "BasicScheduler"
+   },
+   "widgets_values": [
+    "sgm_uniform",
+    6,
+    1
+   ],
+   "widgets_values_named": {
+    "scheduler": "sgm_uniform",
+    "steps": 6,
+    "denoise": 1
+   }
+  },
+  {
+   "id": 79,
+   "type": "CLIPLoader",
+   "pos": [
+    -493.8238008088223,
+    -456.0575530655108
+   ],
+   "size": [
+    421.3683223048715,
+    110.19369014842073
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "CLIP",
+     "type": "CLIP",
+     "links": [
+      165
+     ]
+    }
+   ],
+   "title": "Text encoder",
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.43.0",
+    "Node name for S&R": "CLIPLoader",
+    "models": [
+     {
+      "name": "p-h3-image_text_encoder_int8_convrot.safetensors",
+      "url": "https://huggingface.co/PrunaAI/p-h3-image-comfy/resolve/main/text_encoders/p-h3-image_text_encoder_int8_convrot.safetensors",
+      "directory": "text_encoders"
+     }
+    ],
+    "ue_properties": {
+     "widget_ue_connectable": {},
+     "version": "8.0.1",
+     "input_ue_unconnectable": {}
+    }
+   },
+   "widgets_values": [
+    "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+    "minimax",
+    "default"
+   ],
+   "widgets_values_named": {
+    "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+    "type": "minimax",
+    "device": "default"
+   }
+  },
+  {
+   "id": 89,
+   "type": "RandomNoise",
+   "pos": [
+    -499.43377360823064,
+    -178.19975082142338
+   ],
+   "size": [
+    320,
+    90
+   ],
+   "flags": {},
+   "order": 7,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "NOISE",
+     "type": "NOISE",
+     "links": [
+      164
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.43.0",
+    "Node name for S&R": "RandomNoise",
+    "ue_properties": {
+     "widget_ue_connectable": {},
+     "version": "8.0.1",
+     "input_ue_unconnectable": {}
+    }
+   },
+   "widgets_values": [
+    999701062746193,
+    "fixed"
+   ],
+   "widgets_values_named": {
+    "noise_seed": 999701062746193,
+    "control_after_generate": "fixed"
+   }
+  },
+  {
+   "id": 107,
+   "type": "LoraLoaderModelOnly",
+   "pos": [
+    -494,
+    -640
+   ],
+   "size": [
+    420,
+    100
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 190
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      189
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "LoraLoaderModelOnly",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "YOUR_MODEL2_H3_IMAGE_LORA.safetensors",
+    1.0
+   ],
+   "title": "Model 2 H3 IMAGE LoRA (your trained one; Ctrl+B = off)",
+   "color": "#1f4a2b",
+   "bgcolor": "#2b6a3d"
+  },
+  {
+   "id": 108,
+   "type": "PrimitiveStringMultiline",
+   "pos": [
+    -127,
+    -193
+   ],
+   "size": [
+    760,
+    150
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "STRING",
+     "type": "STRING",
+     "links": [
+      191
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "PrimitiveStringMultiline",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "ine3ss, a 19-year-old adult woman with long straight black hair with chunky teal-turquoise streaks and a centre part, warm brown almond-shaped eyes with long natural lashes, soft natural brushed-up brown eyebrows, fair light skin, a fresh youthful face with light natural makeup, full natural lips with clear lip gloss."
+   ],
+   "title": "1 · HER LOOK (trigger word first)",
+   "color": "#1f4a2b",
+   "bgcolor": "#2b6a3d"
+  },
+  {
+   "id": 109,
+   "type": "PrimitiveStringMultiline",
+   "pos": [
+    -127,
+    10
+   ],
+   "size": [
+    760,
+    230
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "STRING",
+     "type": "STRING",
+     "links": [
+      192
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "PrimitiveStringMultiline",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "Photorealistic front-camera selfie of the exact same person as <Picture 1>: identical face, skin tone, age, black hair with the same teal-turquoise streaks and centre part. Medium close-up down to the hips against a plain white wall, head slightly tilted, arms relaxed away from the body, sceptical raised-brow expression, wearing a black sleeveless scoop-neck top, layered gold chains with a Y-drop pendant and gold hoop earrings. Soft flat daylight, natural slight grain, sharp focus on the face, true-to-life skin texture with visible pores, no beauty filter, no skin smoothing. Change only the pose, outfit, place and light."
+   ],
+   "title": "2 · THE SHOT (pose, outfit, place, light)",
+   "color": "#1f4a2b",
+   "bgcolor": "#2b6a3d"
+  },
+  {
+   "id": 110,
+   "type": "StringConcatenate",
+   "pos": [
+    -127,
+    270
+   ],
+   "size": [
+    400,
+    110
+   ],
+   "flags": {
+    "collapsed": true
+   },
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "string_a",
+     "type": "STRING",
+     "link": 191,
+     "widget": {
+      "name": "string_a"
+     }
+    },
+    {
+     "name": "string_b",
+     "type": "STRING",
+     "link": 192,
+     "widget": {
+      "name": "string_b"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "STRING",
+     "type": "STRING",
+     "links": [
+      193
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "StringConcatenate",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "",
+    "",
+    " "
+   ],
+   "title": "look + shot"
+  },
+  {
+   "id": 111,
+   "type": "MarkdownNote",
+   "pos": [
+    -1670,
+    -1560
+   ],
+   "size": [
+    900,
+    330
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [],
+   "properties": {},
+   "widgets_values": [
+    "# Model 2 · MiniMax H3 image\n1. **LoRA:** put your H3-trained LoRA in `models/loras` and pick it in the green LoRA box. Strength 1.0; try 0.7-0.9 if the face looks over-baked.\n2. **Reference:** Picture 1 is her anchor. It helps identity, and the LoRA adds her face on top. For LoRA only, unplug the image from the conditioning box.\n3. **Prompt:** box 1 = trigger word + her look (keep it), box 2 = the shot. Mention `<Picture 1>` in box 2.\n4. **Tests first:** quality is the sampler steps (6 here). Same seed = same take.\nOutput: `H3_Model2_00001.png`. Use it as the first frame of the H3 video workflow."
+   ],
+   "title": "READ ME · Model 2 · MiniMax H3 image",
+   "color": "#432",
+   "bgcolor": "#653"
+  }
+ ],
+ "links": [
+  [
+   13,
+   10,
+   0,
+   14,
+   1,
+   "GUIDER"
+  ],
+  [
+   14,
+   11,
+   0,
+   14,
+   2,
+   "SAMPLER"
+  ],
+  [
+   17,
+   14,
+   0,
+   15,
+   0,
+   "LATENT"
+  ],
+  [
+   18,
+   3,
+   0,
+   15,
+   1,
+   "VAE"
+  ],
+  [
+   19,
+   15,
+   0,
+   16,
+   0,
+   "IMAGE"
+  ],
+  [
+   108,
+   67,
+   1,
+   14,
+   4,
+   "LATENT"
+  ],
+  [
+   109,
+   67,
+   0,
+   10,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   113,
+   58,
+   0,
+   68,
+   0,
+   "MODEL"
+  ],
+  [
+   114,
+   58,
+   0,
+   10,
+   0,
+   "MODEL"
+  ],
+  [
+   132,
+   68,
+   0,
+   14,
+   3,
+   "SIGMAS"
+  ],
+  [
+   164,
+   89,
+   0,
+   14,
+   0,
+   "NOISE"
+  ],
+  [
+   187,
+   55,
+   0,
+   58,
+   0,
+   "MODEL"
+  ],
+  [
+   165,
+   79,
+   0,
+   67,
+   0,
+   "CLIP"
+  ],
+  [
+   105,
+   3,
+   0,
+   67,
+   1,
+   "VAE"
+  ],
+  [
+   116,
+   56,
+   0,
+   67,
+   2,
+   "IMAGE"
+  ],
+  [
+   106,
+   57,
+   1,
+   67,
+   8,
+   "INT"
+  ],
+  [
+   107,
+   57,
+   2,
+   67,
+   9,
+   "INT"
+  ],
+  [
+   189,
+   107,
+   0,
+   55,
+   0,
+   "MODEL"
+  ],
+  [
+   190,
+   1,
+   0,
+   107,
+   0,
+   "MODEL"
+  ],
+  [
+   191,
+   108,
+   0,
+   110,
+   0,
+   "STRING"
+  ],
+  [
+   192,
+   109,
+   0,
+   110,
+   1,
+   "STRING"
+  ],
+  [
+   193,
+   110,
+   0,
+   67,
+   7,
+   "STRING"
+  ]
+ ],
+ "groups": [
+  {
+   "id": 7,
+   "title": "Group",
+   "bounding": [
+    -535.8711547108483,
+    -856.6384281976273,
+    2628.815571559393,
+    1078.001500893844
+   ],
+   "color": "#3f789e",
+   "flags": {}
+  }
+ ],
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.2940834937055419,
+   "offset": [
+    3405.7044772139807,
+    2463.7183240517456
+   ]
+  },
+  "frontendVersion": "1.58.5",
+  "VHS_latentpreview": false,
+  "VHS_latentpreviewrate": 0,
+  "VHS_MetadataImage": true,
+  "VHS_KeepIntermediate": true,
+  "ue_links": [],
+  "links_added_by_ue": []
+ },
+ "extensions": {
+  "widget_idx_map": {
+   "11": {
+    "sampler_name": 0
+   },
+   "12": {
+    "noise_seed": 0
+   },
+   "47": {
+    "seed": 0,
+    "sampler_name": 4,
+    "scheduler": 5
+   }
+  },
+  "seed_widgets": {
+   "12": 0,
+   "47": 0
+  }
+ },
+ "version": 0.4
+}

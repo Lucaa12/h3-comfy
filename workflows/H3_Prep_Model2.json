@@ -1,0 +1,2102 @@
+{
+ "id": "b3f49e45-2de9-5c37-a2d1-32141b0d5646",
+ "revision": 0,
+ "last_node_id": 760,
+ "last_link_id": 1847,
+ "nodes": [
+  {
+   "id": 115,
+   "type": "ResolutionSelector",
+   "pos": [
+    -1480,
+    5980
+   ],
+   "size": [
+    270,
+    170
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "showAdvanced": false,
+   "inputs": [
+    {
+     "name": "preview",
+     "shape": 7,
+     "type": "RESOLUTION_PREVIEW",
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "name": "width",
+     "type": "INT",
+     "links": [
+      1780
+     ]
+    },
+    {
+     "name": "height",
+     "type": "INT",
+     "links": [
+      1781
+     ]
+    }
+   ],
+   "title": "Resolution (9:16, 0.98 MP = 768 x 1344)",
+   "properties": {
+    "Node name for S&R": "ResolutionSelector",
+    "cnr_id": "comfy-core",
+    "ver": "0.33.0"
+   },
+   "widgets_values": [
+    "9:16 (Portrait Widescreen)",
+    0.98,
+    32
+   ],
+   "widgets_values_named": {
+    "aspect_ratio": "9:16 (Portrait Widescreen)",
+    "megapixels": 0.98,
+    "multiple": 32
+   },
+   "color": "#322",
+   "bgcolor": "#533"
+  },
+  {
+   "id": 116,
+   "type": "MarkdownNote",
+   "pos": [
+    -2020,
+    4870
+   ],
+   "size": [
+    620,
+    470
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [],
+   "title": "READ ME - step 1 of 2: prepare the movement",
+   "properties": {},
+   "widgets_values": [
+    "# STEP 1 of 2 - prepare the movement (Model 2)\nRuns the reference video through SDPose (pose) and resizes the frames. **No big video model is loaded**, so it fits small pods.\n\n1. Put your reference video in `ComfyUI/input` and pick it in box 1. Set the **same duration** in this workflow and in step 2.\n2. Run. Three files appear in `output/prep/`: `H3_pose_*.webp`, `H3_source_*.webp`, `H3_audio_*.mp4`.\n3. Copy all three into `ComfyUI/input` (command in the installer notes: `cp output/prep/H3_* input/`).\n4. **Restart ComfyUI** (frees the RAM), then open `H3_Generate_Model2` for step 2.\n\nRe-run this step only when the reference video or the duration changes."
+   ],
+   "widgets_values_named": {
+    "text": "## Motion control: copy a reference video's movement onto your AI model (MiniMax H3)\n\nBuilt on the official ComfyUI template `video_minimax_h3_fun_controlnet_union` plus the official SAM3 segmentation subgraph. Needs ComfyUI 0.45+ and no custom nodes (ColorTransfer needs `kornia`, which ComfyUI installs). The video VAE is the full-precision fp16 file, to avoid dark-frame flashing.\n\n**What it does**\n1. **SDPose** reads the body and hands of the person in the reference video, which gives the movement.\n2. **SAM3** cuts that person out, which gives the mask. Only the masked area is repainted, so the original room, light and camera stay.\n3. **Reference-to-video** draws your AI model (Picture 1) inside the mask, following the movement.\n4. **Color Transfer** matches the new person to the video, the result is pasted over the untouched background, then an iPhone finish (sharpen + grain) is added.\n\n**Before you press Run**\n- Load the reference video (node 1). Best: vertical 9:16, 24 fps or more, one person, steady camera, full body or waist-up, clean light.\n- Set **Duration** to the length of your reference clip in seconds (default 3, max 15). Never set it longer than the clip, or the movement plays in slow motion and the audio runs out. It cuts the video and sets the length at the same time, so the speed stays right. The video must be at least that long. Keep the Trim node's `start_time` at 0 (to use a later part of a video, cut it before you upload).\n- Load your AI model photo into **Picture 1** (sharp, face visible).\n- Edit the **prompt**: only the outfit. The speech comes from the video's own sound. Keep the `<Picture 1>` tag.\n\n**Settings (red nodes)**\n- **Keep original background?** ON = only the person is replaced. OFF = the whole frame is regenerated from the movement (describe the new place in the prompt).\n- **Apply Fun ControlNet** strength 1.0, end_percent 1.0 (follows the pose to the last step). Stiff or robotic = lower end_percent (0.8, then 0.6). Movement drifts = raise strength (1.2-1.5).\n- **Grow mask** 24 px: raise it if the new person is wider than the original one or the old outline shows.\n- **Color match** is per frame (matches every frame to the same frame of the reference video), which stops brightness flashing. Strength 1.0; lower it if colours look flat, 0 = off.\n- **Flashing?** Keep the prompt line about constant exposure and white balance (never ask H3 for auto-exposure or white-balance shifts, it renders them as flicker). Turn the Lightning LoRA OFF and use the fp16 video VAE.\n- **iPhone look** toggle: sharpen alpha 0.04-0.10 (tiny values!), grain 0.01-0.03.\n- **Lightning LoRA** on = 4 steps for quick tests. Off (default) = 12 steps, set in the node \"Steps without Lightning LoRA\"; raise it to 20 for the best quality, lower it for speed.\n- Hands or arms popping in and out for single frames = the pose lost them on those frames. The pose detection thresholds are already lowered to 0.3; look at the pose preview for frames with a missing hand.\n- Check the **pose preview** and the **mask preview** first. If the pose skeleton or the mask is wrong, the result will be wrong.\n\n**Lip sync (automatic)**\n- The workflow takes the **sound of the reference video** and feeds it to H3 through the **Add Audio Guide** node, so your AI model speaks that audio and the lips follow it. The pose also keeps the original mouth movements (SDPose face points are ON), which match that audio exactly.\n- The audio comes out re-encoded by H3's audio model, so it can sound slightly different from the original.\n- **Native voice instead** (H3 speaks a line from your prompt): select **Add Audio Guide** and press Ctrl+B to turn it off, turn the SDPose `draw_face` off, and use the native-voice prompt.\n- If the reference video has no sound, turn the guide off too, otherwise the run stops with an error.\n\n**Limits**\n- If the loaded video looks sideways, re-export it as a plain 9:16 MP4 (phone clips can carry a rotation flag).\n- Fast spins, hands crossing the face and two people overlapping can fail. Cut a calmer clip.\n- Long clips (10 s+) at 0.98 MP use a lot of RAM for the mask and frames. If it runs out, lower the resolution to 0.4 MP or use a shorter Duration.\n- Only use a reference video you have the right to use, and a face you have permission to use.\n\n\n**Keep original background (default OFF).** OFF = the model makes the whole frame from Picture 1 + the pose: no outline, background as sharp as the person. ON = only the person is repainted and pasted over the original video; this can leave an outline and a softer background, because the reference video is lower resolution than the output."
+   },
+   "color": "#222",
+   "bgcolor": "#000"
+  },
+  {
+   "id": 131,
+   "type": "ComfyMathExpression",
+   "pos": [
+    -1470,
+    6460
+   ],
+   "size": [
+    225,
+    0
+   ],
+   "flags": {
+    "collapsed": true
+   },
+   "order": 22,
+   "mode": 0,
+   "inputs": [
+    {
+     "label": "a",
+     "name": "values.a",
+     "type": "FLOAT,INT,BOOLEAN",
+     "link": 261
+    },
+    {
+     "name": "values.b",
+     "shape": 7,
+     "type": "FLOAT,INT,BOOLEAN",
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "name": "FLOAT",
+     "type": "FLOAT",
+     "links": []
+    },
+    {
+     "name": "INT",
+     "type": "INT",
+     "links": [
+      1776
+     ]
+    },
+    {
+     "name": "BOOL",
+     "type": "BOOLEAN",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ComfyMathExpression",
+    "cnr_id": "comfy-core",
+    "ver": "0.33.0"
+   },
+   "widgets_values": [
+    "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17"
+   ],
+   "widgets_values_named": {
+    "expression": "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17"
+   }
+  },
+  {
+   "id": 132,
+   "type": "PrimitiveFloat",
+   "pos": [
+    -1480,
+    6330
+   ],
+   "size": [
+    270,
+    70
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "FLOAT",
+     "type": "FLOAT",
+     "links": [
+      261,
+      1773
+     ]
+    }
+   ],
+   "title": "Duration in seconds (reference clip to copy, max 15)",
+   "properties": {
+    "Node name for S&R": "PrimitiveFloat",
+    "cnr_id": "comfy-core",
+    "ver": "0.33.0"
+   },
+   "widgets_values": [
+    8
+   ],
+   "widgets_values_named": {
+    "value": 8
+   },
+   "color": "#322",
+   "bgcolor": "#533"
+  },
+  {
+   "id": 174,
+   "type": "LoadVideo",
+   "pos": [
+    -1120,
+    5950
+   ],
+   "size": [
+    330,
+    670
+   ],
+   "flags": {},
+   "order": 16,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "VIDEO",
+     "type": "VIDEO",
+     "links": [
+      1765
+     ]
+    }
+   ],
+   "title": "1 - Reference video (the movement to copy)",
+   "properties": {
+    "Node name for S&R": "LoadVideo"
+   },
+   "widgets_values": [
+    "reference_motion.mp4",
+    "image"
+   ],
+   "widgets_values_named": {
+    "file": "dancer_field_pose.mp4",
+    "upload": "image"
+   }
+  },
+  {
+   "id": 700,
+   "type": "622cceeb-7ba3-4dd9-b0e8-00066c5222a4",
+   "pos": [
+    -430,
+    5950
+   ],
+   "size": [
+    370,
+    530
+   ],
+   "flags": {},
+   "order": 27,
+   "mode": 0,
+   "inputs": [
+    {
+     "label": "resize_target_longer_size",
+     "name": "resize_type.longer_size",
+     "type": "INT",
+     "widget": {
+      "name": "resize_type.longer_size"
+     },
+     "link": null
+    },
+    {
+     "label": "detect_threshold",
+     "name": "threshold",
+     "type": "FLOAT",
+     "widget": {
+      "name": "threshold"
+     },
+     "link": null
+    },
+    {
+     "label": "detect_class",
+     "name": "class_name",
+     "type": "COMBO",
+     "widget": {
+      "name": "class_name"
+     },
+     "link": null
+    },
+    {
+     "name": "video",
+     "type": "VIDEO",
+     "link": 1777
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      1842
+     ]
+    },
+    {
+     "name": "keypoints",
+     "type": "POSE_KEYPOINT",
+     "links": null
+    },
+    {
+     "name": "bboxes",
+     "type": "BOUNDING_BOX",
+     "links": []
+    },
+    {
+     "name": "audio",
+     "type": "AUDIO",
+     "links": []
+    },
+    {
+     "name": "fps",
+     "type": "FLOAT",
+     "links": []
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.15.1",
+    "enableTabs": false,
+    "tabWidth": 65,
+    "tabXOffset": 10,
+    "hasSecondTab": false,
+    "secondTabText": "Send Back",
+    "secondTabOffset": 80,
+    "secondTabWidth": 65,
+    "previewExposures": []
+   },
+   "widgets_values": [
+    1344,
+    "lanczos",
+    true,
+    true,
+    true,
+    true,
+    5,
+    4,
+    0.15,
+    0.3,
+    "person",
+    1,
+    "sdpose_wholebody_fp16.safetensors",
+    "rt_detr_v4-x-hgnet_fp16.safetensors"
+   ],
+   "widgets_values_named": {
+    "resize_type.longer_size": 1024,
+    "scale_method": "lanczos",
+    "draw_body": true,
+    "draw_hands": true,
+    "draw_face": true,
+    "draw_feet": true,
+    "stick_width": 4,
+    "face_point_size": 2,
+    "score_threshold": 0.3,
+    "threshold": 0.3,
+    "class_name": "person",
+    "max_detections": 1,
+    "ckpt_name": "sdpose_wholebody_fp16.safetensors",
+    "unet_name": "rt_detr_v4-x-hgnet_fp16.safetensors"
+   },
+   "title": "3 - Pose from reference video (SDPose)"
+  },
+  {
+   "id": 705,
+   "type": "Video Slice",
+   "pos": [
+    -750,
+    5950
+   ],
+   "size": [
+    270,
+    120
+   ],
+   "flags": {},
+   "order": 24,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "video",
+     "type": "VIDEO",
+     "link": 1765
+    },
+    {
+     "name": "duration",
+     "type": "FLOAT",
+     "link": 1773,
+     "widget": {
+      "name": "duration"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "VIDEO",
+     "type": "VIDEO",
+     "links": [
+      1775,
+      1792
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "Video Slice"
+   },
+   "widgets_values": [
+    0,
+    8,
+    false
+   ],
+   "widgets_values_named": {
+    "start_time": 0,
+    "duration": 0,
+    "strict_duration": false
+   },
+   "title": "2 - Trim reference video (keep start_time at 0)"
+  },
+  {
+   "id": 721,
+   "type": "VideoFrameSample",
+   "pos": [
+    -1500,
+    7090
+   ],
+   "size": [
+    300,
+    130
+   ],
+   "flags": {},
+   "order": 61,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "video",
+     "type": "VIDEO",
+     "link": 1775
+    },
+    {
+     "name": "num_frames",
+     "type": "INT",
+     "link": 1776,
+     "widget": {
+      "name": "num_frames"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "video",
+     "type": "VIDEO",
+     "links": [
+      1777,
+      1778
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VideoFrameSample",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    73,
+    "uniform",
+    0
+   ],
+   "widgets_values_named": {
+    "num_frames": 73,
+    "strategy": "uniform",
+    "seed": 0
+   },
+   "title": "4 - Retime to H3 frames (fixes 30/60 fps videos)"
+  },
+  {
+   "id": 722,
+   "type": "GetVideoComponents",
+   "pos": [
+    -1170,
+    7090
+   ],
+   "size": [
+    230,
+    130
+   ],
+   "flags": {},
+   "order": 62,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "video",
+     "type": "VIDEO",
+     "link": 1778
+    }
+   ],
+   "outputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "links": [
+      1779
+     ]
+    },
+    {
+     "name": "audio",
+     "type": "AUDIO",
+     "links": []
+    },
+    {
+     "name": "fps",
+     "type": "FLOAT",
+     "links": []
+    },
+    {
+     "name": "bit_depth",
+     "type": "COMBO",
+     "links": []
+    },
+    {
+     "name": "color_space",
+     "type": "COMBO",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "GetVideoComponents",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [],
+   "title": "Source frames"
+  },
+  {
+   "id": 724,
+   "type": "ImageScale",
+   "pos": [
+    -1170,
+    7260
+   ],
+   "size": [
+    300,
+    150
+   ],
+   "flags": {},
+   "order": 63,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 1779
+    },
+    {
+     "name": "width",
+     "type": "INT",
+     "link": 1780,
+     "widget": {
+      "name": "width"
+     }
+    },
+    {
+     "name": "height",
+     "type": "INT",
+     "link": 1781,
+     "widget": {
+      "name": "height"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      1843,
+      1844
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ImageScale",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [
+    "lanczos",
+    768,
+    1344,
+    "center"
+   ],
+   "widgets_values_named": {
+    "upscale_method": "lanczos",
+    "width": 768,
+    "height": 1344,
+    "crop": "center"
+   },
+   "title": "Source frames at generation size"
+  },
+  {
+   "id": 743,
+   "type": "GetVideoComponents",
+   "pos": [
+    -1110,
+    7520
+   ],
+   "size": [
+    250,
+    130
+   ],
+   "flags": {},
+   "order": 70,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "video",
+     "type": "VIDEO",
+     "link": 1792
+    }
+   ],
+   "outputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "links": []
+    },
+    {
+     "name": "audio",
+     "type": "AUDIO",
+     "links": [
+      1846
+     ]
+    },
+    {
+     "name": "fps",
+     "type": "FLOAT",
+     "links": []
+    },
+    {
+     "name": "bit_depth",
+     "type": "COMBO",
+     "links": []
+    },
+    {
+     "name": "color_space",
+     "type": "COMBO",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "GetVideoComponents",
+    "cnr_id": "comfy-core",
+    "ver": "0.45.0"
+   },
+   "widgets_values": [],
+   "title": "Audio from the reference video (lip sync)",
+   "color": "#322",
+   "bgcolor": "#533"
+  },
+  {
+   "id": 756,
+   "type": "SaveAnimatedWEBP",
+   "pos": [
+    1500,
+    80
+   ],
+   "size": [
+    320,
+    160
+   ],
+   "flags": {},
+   "order": 756,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 1842
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "SaveAnimatedWEBP",
+    "cnr_id": "comfy-core",
+    "ver": "0.46.0"
+   },
+   "widgets_values": [
+    "prep/H3_pose",
+    24,
+    true,
+    80,
+    "default"
+   ],
+   "title": "SAVE 1 - pose frames (lossless)"
+  },
+  {
+   "id": 757,
+   "type": "SaveAnimatedWEBP",
+   "pos": [
+    1500,
+    300
+   ],
+   "size": [
+    320,
+    160
+   ],
+   "flags": {},
+   "order": 757,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 1843
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "SaveAnimatedWEBP",
+    "cnr_id": "comfy-core",
+    "ver": "0.46.0"
+   },
+   "widgets_values": [
+    "prep/H3_source",
+    24,
+    true,
+    80,
+    "default"
+   ],
+   "title": "SAVE 2 - source frames (lossless)"
+  },
+  {
+   "id": 758,
+   "type": "ImageScale",
+   "pos": [
+    1500,
+    520
+   ],
+   "size": [
+    320,
+    130
+   ],
+   "flags": {},
+   "order": 758,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 1844
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      1845
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ImageScale",
+    "cnr_id": "comfy-core",
+    "ver": "0.46.0"
+   },
+   "widgets_values": [
+    "bilinear",
+    64,
+    112,
+    "disabled"
+   ],
+   "title": "tiny copy of the frames (only carries the audio)"
+  },
+  {
+   "id": 759,
+   "type": "CreateVideo",
+   "pos": [
+    1850,
+    520
+   ],
+   "size": [
+    260,
+    140
+   ],
+   "flags": {},
+   "order": 759,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 1845
+    },
+    {
+     "name": "audio",
+     "type": "AUDIO",
+     "link": 1846,
+     "shape": 7
+    },
+    {
+     "name": "fps",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "fps"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "VIDEO",
+     "type": "VIDEO",
+     "links": [
+      1847
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "CreateVideo",
+    "cnr_id": "comfy-core",
+    "ver": "0.46.0"
+   },
+   "widgets_values": [
+    24,
+    "auto",
+    "sRGB"
+   ],
+   "title": "audio carrier"
+  },
+  {
+   "id": 760,
+   "type": "SaveVideo",
+   "pos": [
+    2150,
+    520
+   ],
+   "size": [
+    420,
+    130
+   ],
+   "flags": {},
+   "order": 760,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "video",
+     "type": "VIDEO",
+     "link": 1847
+    }
+   ],
+   "outputs": [
+    {
+     "name": "video",
+     "type": "VIDEO",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SaveVideo",
+    "cnr_id": "comfy-core",
+    "ver": "0.46.0"
+   },
+   "widgets_values": [
+    "prep/H3_audio",
+    "auto",
+    "auto",
+    "auto"
+   ],
+   "title": "SAVE 3 - audio of the reference clip"
+  }
+ ],
+ "links": [
+  [
+   261,
+   132,
+   0,
+   131,
+   0,
+   "FLOAT"
+  ],
+  [
+   1765,
+   174,
+   0,
+   705,
+   0,
+   "VIDEO"
+  ],
+  [
+   1773,
+   132,
+   0,
+   705,
+   1,
+   "FLOAT"
+  ],
+  [
+   1775,
+   705,
+   0,
+   721,
+   0,
+   "VIDEO"
+  ],
+  [
+   1776,
+   131,
+   1,
+   721,
+   1,
+   "INT"
+  ],
+  [
+   1777,
+   721,
+   0,
+   700,
+   3,
+   "VIDEO"
+  ],
+  [
+   1778,
+   721,
+   0,
+   722,
+   0,
+   "VIDEO"
+  ],
+  [
+   1779,
+   722,
+   0,
+   724,
+   0,
+   "IMAGE"
+  ],
+  [
+   1780,
+   115,
+   0,
+   724,
+   1,
+   "INT"
+  ],
+  [
+   1781,
+   115,
+   1,
+   724,
+   2,
+   "INT"
+  ],
+  [
+   1792,
+   705,
+   0,
+   743,
+   0,
+   "VIDEO"
+  ],
+  [
+   1842,
+   700,
+   0,
+   756,
+   0,
+   "IMAGE"
+  ],
+  [
+   1843,
+   724,
+   0,
+   757,
+   0,
+   "IMAGE"
+  ],
+  [
+   1844,
+   724,
+   0,
+   758,
+   0,
+   "IMAGE"
+  ],
+  [
+   1845,
+   758,
+   0,
+   759,
+   0,
+   "IMAGE"
+  ],
+  [
+   1846,
+   743,
+   1,
+   759,
+   1,
+   "AUDIO"
+  ],
+  [
+   1847,
+   759,
+   0,
+   760,
+   0,
+   "VIDEO"
+  ]
+ ],
+ "groups": [],
+ "definitions": {
+  "subgraphs": [
+   {
+    "id": "622cceeb-7ba3-4dd9-b0e8-00066c5222a4",
+    "version": 1,
+    "state": {
+     "lastGroupId": 9,
+     "lastNodeId": 717,
+     "lastLinkId": 1772,
+     "lastRerouteId": 0
+    },
+    "revision": 0,
+    "config": {},
+    "name": "SDPose Video Pose Extractor [Multi‑Person]",
+    "description": "Extracts multi-person pose keypoints and skeleton frame sequences from video using SDPose with built-in person detection.",
+    "inputNode": {
+     "id": -10,
+     "bounding": [
+      -3570,
+      3300,
+      182.8984375,
+      340
+     ]
+    },
+    "outputNode": {
+     "id": -20,
+     "bounding": [
+      -1890,
+      3730,
+      120,
+      140
+     ]
+    },
+    "inputs": [
+     {
+      "id": "088eefc1-cd8a-4573-993f-9e4da008a12d",
+      "name": "resize_type.longer_size",
+      "type": "INT",
+      "linkIds": [
+       1704
+      ],
+      "label": "resize_target_longer_size",
+      "pos": [
+       -3407.1015625,
+       3320
+      ]
+     },
+     {
+      "id": "b6449bd3-73d4-41c8-b81f-cf8d33f76a2e",
+      "name": "scale_method",
+      "type": "COMBO",
+      "linkIds": [
+       1705
+      ],
+      "pos": [
+       -3407.1015625,
+       3340
+      ]
+     },
+     {
+      "id": "4cff52ad-ed07-4c97-8803-fcbd89554fd0",
+      "name": "draw_body",
+      "type": "BOOLEAN",
+      "linkIds": [
+       1706
+      ],
+      "pos": [
+       -3407.1015625,
+       3360
+      ]
+     },
+     {
+      "id": "7af63dce-f7df-4d7e-8215-d7c7f60bf81c",
+      "name": "draw_hands",
+      "type": "BOOLEAN",
+      "linkIds": [
+       1707
+      ],
+      "pos": [
+       -3407.1015625,
+       3380
+      ]
+     },
+     {
+      "id": "af3a9bce-61f9-4aca-b530-9f65e028b35e",
+      "name": "draw_face",
+      "type": "BOOLEAN",
+      "linkIds": [
+       1708
+      ],
+      "pos": [
+       -3407.1015625,
+       3400
+      ]
+     },
+     {
+      "id": "4620f6a3-2c85-4b79-ad8f-35d0326b568f",
+      "name": "draw_feet",
+      "type": "BOOLEAN",
+      "linkIds": [
+       1709
+      ],
+      "pos": [
+       -3407.1015625,
+       3420
+      ]
+     },
+     {
+      "id": "fee5d0c9-8d4b-4934-81d8-ba2206dc56cb",
+      "name": "stick_width",
+      "type": "INT",
+      "linkIds": [
+       1710
+      ],
+      "pos": [
+       -3407.1015625,
+       3440
+      ]
+     },
+     {
+      "id": "aafdd060-ba81-4324-a9cc-b656e1ebc133",
+      "name": "face_point_size",
+      "type": "INT",
+      "linkIds": [
+       1711
+      ],
+      "pos": [
+       -3407.1015625,
+       3460
+      ]
+     },
+     {
+      "id": "514c5503-f9e6-4d23-b1ae-1d3291acb2a3",
+      "name": "score_threshold",
+      "type": "FLOAT",
+      "linkIds": [
+       1712
+      ],
+      "pos": [
+       -3407.1015625,
+       3480
+      ]
+     },
+     {
+      "id": "4eb3e4ea-7a36-4511-8483-0d12aadd32f7",
+      "name": "threshold",
+      "type": "FLOAT",
+      "linkIds": [
+       1718
+      ],
+      "label": "detect_threshold",
+      "pos": [
+       -3407.1015625,
+       3500
+      ]
+     },
+     {
+      "id": "c76a7a05-81e6-4b17-a9e0-85f47a5844f2",
+      "name": "class_name",
+      "type": "COMBO",
+      "linkIds": [
+       1719
+      ],
+      "label": "detect_class",
+      "pos": [
+       -3407.1015625,
+       3520
+      ]
+     },
+     {
+      "id": "4417e988-6e80-4236-be31-4c179037f5a2",
+      "name": "max_detections",
+      "type": "INT",
+      "linkIds": [
+       1720
+      ],
+      "pos": [
+       -3407.1015625,
+       3540
+      ]
+     },
+     {
+      "id": "7d7c4a0b-0d1b-4c98-942b-f90548d2a492",
+      "name": "ckpt_name",
+      "type": "COMBO",
+      "linkIds": [
+       1721
+      ],
+      "pos": [
+       -3407.1015625,
+       3560
+      ]
+     },
+     {
+      "id": "4d75122c-2c14-452a-98fe-d1545d3e012a",
+      "name": "unet_name",
+      "type": "COMBO",
+      "linkIds": [
+       1722
+      ],
+      "pos": [
+       -3407.1015625,
+       3580
+      ]
+     },
+     {
+      "id": "6c46c988-4dd1-41a2-957e-03caf60d7657",
+      "name": "video",
+      "type": "VIDEO",
+      "linkIds": [
+       1741
+      ],
+      "pos": [
+       -3407.1015625,
+       3600
+      ]
+     }
+    ],
+    "outputs": [
+     {
+      "id": "f05ed8cc-9403-4f14-8085-4364b06f8a48",
+      "name": "IMAGE",
+      "type": "IMAGE",
+      "linkIds": [
+       1701
+      ],
+      "localized_name": "IMAGE",
+      "pos": [
+       -1870,
+       3750
+      ]
+     },
+     {
+      "id": "4b64118e-3cef-4eeb-9dad-4cd09cfd63a2",
+      "name": "keypoints",
+      "type": "POSE_KEYPOINT",
+      "linkIds": [
+       1725
+      ],
+      "pos": [
+       -1870,
+       3770
+      ]
+     },
+     {
+      "id": "a27f7e34-dcbc-4fb0-a4e1-2c5fc423ca5f",
+      "name": "bboxes",
+      "type": "BOUNDING_BOX",
+      "linkIds": [
+       1726
+      ],
+      "pos": [
+       -1870,
+       3790
+      ]
+     },
+     {
+      "id": "b7fe351d-2b38-41ea-9f4d-3be1a0aad275",
+      "name": "audio",
+      "type": "AUDIO",
+      "linkIds": [
+       1743
+      ],
+      "pos": [
+       -1870,
+       3810
+      ]
+     },
+     {
+      "id": "ae187b6f-c9ca-4487-b5c1-3ad775fe945e",
+      "name": "fps",
+      "type": "FLOAT",
+      "linkIds": [
+       1744
+      ],
+      "pos": [
+       -1870,
+       3830
+      ]
+     }
+    ],
+    "widgets": [],
+    "nodes": [
+     {
+      "id": 671,
+      "type": "SDPoseKeypointExtractor",
+      "pos": [
+       -2550,
+       3080
+      ],
+      "size": [
+       270,
+       180
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "model",
+        "name": "model",
+        "type": "MODEL",
+        "link": 1696
+       },
+       {
+        "localized_name": "vae",
+        "name": "vae",
+        "type": "VAE",
+        "link": 1697
+       },
+       {
+        "localized_name": "image",
+        "name": "image",
+        "type": "IMAGE",
+        "link": 1698
+       },
+       {
+        "localized_name": "bboxes",
+        "name": "bboxes",
+        "shape": 7,
+        "type": "BOUNDING_BOX",
+        "link": 1717
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "keypoints",
+        "name": "keypoints",
+        "type": "POSE_KEYPOINT",
+        "links": [
+         1699,
+         1725
+        ]
+       }
+      ],
+      "properties": {
+       "Node name for S&R": "SDPoseKeypointExtractor",
+       "cnr_id": "comfy-core",
+       "ver": "0.15.0",
+       "enableTabs": false,
+       "tabWidth": 65,
+       "tabXOffset": 10,
+       "hasSecondTab": false,
+       "secondTabText": "Send Back",
+       "secondTabOffset": 80,
+       "secondTabWidth": 65
+      },
+      "widgets_values": [
+       16
+      ],
+      "widgets_values_named": {
+       "batch_size": 16
+      }
+     },
+     {
+      "id": 674,
+      "type": "ResizeImageMaskNode",
+      "pos": [
+       -3010,
+       3880
+      ],
+      "size": [
+       270,
+       110
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "input",
+        "name": "input",
+        "type": "IMAGE,MASK",
+        "link": 1742
+       },
+       {
+        "localized_name": "longer_size",
+        "name": "resize_type.longer_size",
+        "type": "INT",
+        "widget": {
+         "name": "resize_type.longer_size"
+        },
+        "link": 1704
+       },
+       {
+        "localized_name": "scale_method",
+        "name": "scale_method",
+        "type": "COMBO",
+        "widget": {
+         "name": "scale_method"
+        },
+        "link": 1705
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "resized",
+        "name": "resized",
+        "type": "IMAGE",
+        "links": [
+         1698,
+         1716
+        ]
+       }
+      ],
+      "properties": {
+       "Node name for S&R": "ResizeImageMaskNode",
+       "cnr_id": "comfy-core",
+       "ver": "0.15.0",
+       "enableTabs": false,
+       "tabWidth": 65,
+       "tabXOffset": 10,
+       "hasSecondTab": false,
+       "secondTabText": "Send Back",
+       "secondTabOffset": 80,
+       "secondTabWidth": 65
+      },
+      "widgets_values": [
+       "scale longer dimension",
+       1344,
+       "lanczos"
+      ],
+      "widgets_values_named": {
+       "resize_type": "scale longer dimension",
+       "resize_type.longer_size": 1024,
+       "scale_method": "lanczos"
+      }
+     },
+     {
+      "id": 672,
+      "type": "SDPoseDrawKeypoints",
+      "pos": [
+       -2540,
+       3590
+      ],
+      "size": [
+       270,
+       280
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "keypoints",
+        "name": "keypoints",
+        "type": "POSE_KEYPOINT",
+        "link": 1699
+       },
+       {
+        "localized_name": "draw_body",
+        "name": "draw_body",
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "draw_body"
+        },
+        "link": 1706
+       },
+       {
+        "localized_name": "draw_hands",
+        "name": "draw_hands",
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "draw_hands"
+        },
+        "link": 1707
+       },
+       {
+        "localized_name": "draw_face",
+        "name": "draw_face",
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "draw_face"
+        },
+        "link": 1708
+       },
+       {
+        "localized_name": "draw_feet",
+        "name": "draw_feet",
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "draw_feet"
+        },
+        "link": 1709
+       },
+       {
+        "localized_name": "stick_width",
+        "name": "stick_width",
+        "type": "INT",
+        "widget": {
+         "name": "stick_width"
+        },
+        "link": 1710
+       },
+       {
+        "localized_name": "face_point_size",
+        "name": "face_point_size",
+        "type": "INT",
+        "widget": {
+         "name": "face_point_size"
+        },
+        "link": 1711
+       },
+       {
+        "localized_name": "score_threshold",
+        "name": "score_threshold",
+        "type": "FLOAT",
+        "widget": {
+         "name": "score_threshold"
+        },
+        "link": 1712
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "IMAGE",
+        "name": "IMAGE",
+        "type": "IMAGE",
+        "links": [
+         1701
+        ]
+       }
+      ],
+      "properties": {
+       "Node name for S&R": "SDPoseDrawKeypoints",
+       "cnr_id": "comfy-core",
+       "ver": "0.15.0",
+       "enableTabs": false,
+       "tabWidth": 65,
+       "tabXOffset": 10,
+       "hasSecondTab": false,
+       "secondTabText": "Send Back",
+       "secondTabOffset": 80,
+       "secondTabWidth": 65
+      },
+      "widgets_values": [
+       true,
+       true,
+       true,
+       true,
+       5,
+       4,
+       0.15,
+       true
+      ],
+      "widgets_values_named": {
+       "draw_body": true,
+       "draw_hands": true,
+       "draw_face": true,
+       "draw_feet": true,
+       "stick_width": 4,
+       "face_point_size": 2,
+       "score_threshold": 0.5,
+       "draw_head": true
+      }
+     },
+     {
+      "id": 673,
+      "type": "CheckpointLoaderSimple",
+      "pos": [
+       -3040,
+       3080
+      ],
+      "size": [
+       390,
+       160
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "ckpt_name",
+        "name": "ckpt_name",
+        "type": "COMBO",
+        "widget": {
+         "name": "ckpt_name"
+        },
+        "link": 1721
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "MODEL",
+        "name": "MODEL",
+        "type": "MODEL",
+        "links": [
+         1696
+        ]
+       },
+       {
+        "localized_name": "CLIP",
+        "name": "CLIP",
+        "type": "CLIP",
+        "links": []
+       },
+       {
+        "localized_name": "VAE",
+        "name": "VAE",
+        "type": "VAE",
+        "links": [
+         1697
+        ]
+       }
+      ],
+      "properties": {
+       "Node name for S&R": "CheckpointLoaderSimple",
+       "cnr_id": "comfy-core",
+       "ver": "0.15.0",
+       "models": [
+        {
+         "name": "sdpose_wholebody_fp16.safetensors",
+         "url": "https://huggingface.co/Comfy-Org/SDPose/resolve/main/checkpoints/sdpose_wholebody_fp16.safetensors",
+         "directory": "checkpoints"
+        }
+       ],
+       "enableTabs": false,
+       "tabWidth": 65,
+       "tabXOffset": 10,
+       "hasSecondTab": false,
+       "secondTabText": "Send Back",
+       "secondTabOffset": 80,
+       "secondTabWidth": 65
+      },
+      "widgets_values": [
+       "sdpose_wholebody_fp16.safetensors"
+      ],
+      "widgets_values_named": {
+       "ckpt_name": "sdpose_wholebody_fp16.safetensors"
+      }
+     },
+     {
+      "id": 677,
+      "type": "UNETLoader",
+      "pos": [
+       -3030,
+       3300
+      ],
+      "size": [
+       370,
+       110
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "unet_name",
+        "name": "unet_name",
+        "type": "COMBO",
+        "widget": {
+         "name": "unet_name"
+        },
+        "link": 1722
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "MODEL",
+        "name": "MODEL",
+        "type": "MODEL",
+        "links": [
+         1715
+        ]
+       }
+      ],
+      "properties": {
+       "Node name for S&R": "UNETLoader",
+       "cnr_id": "comfy-core",
+       "ver": "0.14.1",
+       "models": [
+        {
+         "name": "rt_detr_v4-x-hgnet_fp16.safetensors",
+         "url": "https://huggingface.co/Comfy-Org/SDPose/resolve/main/diffusion_models/rt_detr_v4-x-hgnet_fp16.safetensors",
+         "directory": "diffusion_models"
+        }
+       ],
+       "enableTabs": false,
+       "tabWidth": 65,
+       "tabXOffset": 10,
+       "hasSecondTab": false,
+       "secondTabText": "Send Back",
+       "secondTabOffset": 80,
+       "secondTabWidth": 65
+      },
+      "widgets_values": [
+       "rt_detr_v4-x-hgnet_fp16.safetensors",
+       "default"
+      ],
+      "widgets_values_named": {
+       "unet_name": "rt_detr_v4-x-hgnet_fp16.safetensors",
+       "weight_dtype": "default"
+      }
+     },
+     {
+      "id": 678,
+      "type": "RTDETR_detect",
+      "pos": [
+       -2540,
+       3320
+      ],
+      "size": [
+       280,
+       200
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+       {
+        "label": "model",
+        "localized_name": "model",
+        "name": "model",
+        "type": "MODEL",
+        "link": 1715
+       },
+       {
+        "label": "image",
+        "localized_name": "image",
+        "name": "image",
+        "type": "IMAGE",
+        "link": 1716
+       },
+       {
+        "localized_name": "threshold",
+        "name": "threshold",
+        "type": "FLOAT",
+        "widget": {
+         "name": "threshold"
+        },
+        "link": 1718
+       },
+       {
+        "localized_name": "class_name",
+        "name": "class_name",
+        "type": "COMBO",
+        "widget": {
+         "name": "class_name"
+        },
+        "link": 1719
+       },
+       {
+        "localized_name": "max_detections",
+        "name": "max_detections",
+        "type": "INT",
+        "widget": {
+         "name": "max_detections"
+        },
+        "link": 1720
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "bboxes",
+        "name": "bboxes",
+        "type": "BOUNDING_BOX",
+        "links": [
+         1717,
+         1726
+        ]
+       }
+      ],
+      "properties": {
+       "Node name for S&R": "RTDETR_detect",
+       "cnr_id": "comfy-core",
+       "ver": "0.15.1",
+       "enableTabs": false,
+       "tabWidth": 65,
+       "tabXOffset": 10,
+       "hasSecondTab": false,
+       "secondTabText": "Send Back",
+       "secondTabOffset": 80,
+       "secondTabWidth": 65
+      },
+      "widgets_values": [
+       0.5,
+       "person",
+       2
+      ],
+      "widgets_values_named": {
+       "threshold": 0.5,
+       "class_name": "person",
+       "max_detections": 2
+      }
+     },
+     {
+      "id": 692,
+      "type": "GetVideoComponents",
+      "pos": [
+       -3010,
+       4100
+      ],
+      "size": [
+       230,
+       120
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "video",
+        "name": "video",
+        "type": "VIDEO",
+        "link": 1741
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "images",
+        "name": "images",
+        "type": "IMAGE",
+        "links": [
+         1742
+        ]
+       },
+       {
+        "localized_name": "audio",
+        "name": "audio",
+        "type": "AUDIO",
+        "links": [
+         1743
+        ]
+       },
+       {
+        "localized_name": "fps",
+        "name": "fps",
+        "type": "FLOAT",
+        "links": [
+         1744
+        ]
+       },
+       {
+        "localized_name": "bit_depth",
+        "name": "bit_depth",
+        "type": "COMBO",
+        "links": null
+       },
+       {
+        "localized_name": "color_space",
+        "name": "color_space",
+        "type": "COMBO",
+        "links": null
+       }
+      ],
+      "properties": {
+       "Node name for S&R": "GetVideoComponents",
+       "cnr_id": "comfy-core",
+       "ver": "0.18.1",
+       "enableTabs": false,
+       "tabWidth": 65,
+       "tabXOffset": 10,
+       "hasSecondTab": false,
+       "secondTabText": "Send Back",
+       "secondTabOffset": 80,
+       "secondTabWidth": 65
+      }
+     }
+    ],
+    "groups": [],
+    "links": [
+     {
+      "id": 1696,
+      "origin_id": 673,
+      "origin_slot": 0,
+      "target_id": 671,
+      "target_slot": 0,
+      "type": "MODEL"
+     },
+     {
+      "id": 1697,
+      "origin_id": 673,
+      "origin_slot": 2,
+      "target_id": 671,
+      "target_slot": 1,
+      "type": "VAE"
+     },
+     {
+      "id": 1698,
+      "origin_id": 674,
+      "origin_slot": 0,
+      "target_id": 671,
+      "target_slot": 2,
+      "type": "IMAGE"
+     },
+     {
+      "id": 1699,
+      "origin_id": 671,
+      "origin_slot": 0,
+      "target_id": 672,
+      "target_slot": 0,
+      "type": "POSE_KEYPOINT"
+     },
+     {
+      "id": 1701,
+      "origin_id": 672,
+      "origin_slot": 0,
+      "target_id": -20,
+      "target_slot": 0,
+      "type": "IMAGE"
+     },
+     {
+      "id": 1704,
+      "origin_id": -10,
+      "origin_slot": 0,
+      "target_id": 674,
+      "target_slot": 1,
+      "type": "INT"
+     },
+     {
+      "id": 1705,
+      "origin_id": -10,
+      "origin_slot": 1,
+      "target_id": 674,
+      "target_slot": 2,
+      "type": "COMBO"
+     },
+     {
+      "id": 1706,
+      "origin_id": -10,
+      "origin_slot": 2,
+      "target_id": 672,
+      "target_slot": 1,
+      "type": "BOOLEAN"
+     },
+     {
+      "id": 1707,
+      "origin_id": -10,
+      "origin_slot": 3,
+      "target_id": 672,
+      "target_slot": 2,
+      "type": "BOOLEAN"
+     },
+     {
+      "id": 1708,
+      "origin_id": -10,
+      "origin_slot": 4,
+      "target_id": 672,
+      "target_slot": 3,
+      "type": "BOOLEAN"
+     },
+     {
+      "id": 1709,
+      "origin_id": -10,
+      "origin_slot": 5,
+      "target_id": 672,
+      "target_slot": 4,
+      "type": "BOOLEAN"
+     },
+     {
+      "id": 1710,
+      "origin_id": -10,
+      "origin_slot": 6,
+      "target_id": 672,
+      "target_slot": 5,
+      "type": "INT"
+     },
+     {
+      "id": 1711,
+      "origin_id": -10,
+      "origin_slot": 7,
+      "target_id": 672,
+      "target_slot": 6,
+      "type": "INT"
+     },
+     {
+      "id": 1712,
+      "origin_id": -10,
+      "origin_slot": 8,
+      "target_id": 672,
+      "target_slot": 7,
+      "type": "FLOAT"
+     },
+     {
+      "id": 1715,
+      "origin_id": 677,
+      "origin_slot": 0,
+      "target_id": 678,
+      "target_slot": 0,
+      "type": "MODEL"
+     },
+     {
+      "id": 1716,
+      "origin_id": 674,
+      "origin_slot": 0,
+      "target_id": 678,
+      "target_slot": 1,
+      "type": "IMAGE"
+     },
+     {
+      "id": 1717,
+      "origin_id": 678,
+      "origin_slot": 0,
+      "target_id": 671,
+      "target_slot": 3,
+      "type": "BOUNDING_BOX"
+     },
+     {
+      "id": 1718,
+      "origin_id": -10,
+      "origin_slot": 9,
+      "target_id": 678,
+      "target_slot": 2,
+      "type": "FLOAT"
+     },
+     {
+      "id": 1719,
+      "origin_id": -10,
+      "origin_slot": 10,
+      "target_id": 678,
+      "target_slot": 3,
+      "type": "COMBO"
+     },
+     {
+      "id": 1720,
+      "origin_id": -10,
+      "origin_slot": 11,
+      "target_id": 678,
+      "target_slot": 4,
+      "type": "INT"
+     },
+     {
+      "id": 1721,
+      "origin_id": -10,
+      "origin_slot": 12,
+      "target_id": 673,
+      "target_slot": 0,
+      "type": "COMBO"
+     },
+     {
+      "id": 1722,
+      "origin_id": -10,
+      "origin_slot": 13,
+      "target_id": 677,
+      "target_slot": 0,
+      "type": "COMBO"
+     },
+     {
+      "id": 1725,
+      "origin_id": 671,
+      "origin_slot": 0,
+      "target_id": -20,
+      "target_slot": 1,
+      "type": "POSE_KEYPOINT"
+     },
+     {
+      "id": 1726,
+      "origin_id": 678,
+      "origin_slot": 0,
+      "target_id": -20,
+      "target_slot": 2,
+      "type": "BOUNDING_BOX"
+     },
+     {
+      "id": 1741,
+      "origin_id": -10,
+      "origin_slot": 14,
+      "target_id": 692,
+      "target_slot": 0,
+      "type": "VIDEO"
+     },
+     {
+      "id": 1742,
+      "origin_id": 692,
+      "origin_slot": 0,
+      "target_id": 674,
+      "target_slot": 0,
+      "type": "IMAGE"
+     },
+     {
+      "id": 1743,
+      "origin_id": 692,
+      "origin_slot": 1,
+      "target_id": -20,
+      "target_slot": 3,
+      "type": "AUDIO"
+     },
+     {
+      "id": 1744,
+      "origin_id": 692,
+      "origin_slot": 2,
+      "target_id": -20,
+      "target_slot": 4,
+      "type": "FLOAT"
+     }
+    ],
+    "extra": {
+     "workflowRendererVersion": "LG"
+    }
+   }
+  ]
+ },
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.6,
+   "offset": [
+    60,
+    60
+   ]
+  }
+ },
+ "version": 0.4
+}
