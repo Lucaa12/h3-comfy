@@ -30,3 +30,14 @@ One image with ComfyUI (current), all custom nodes and the Model 2 workflows. **
 - Set the template **container disk to 120 GB** and attach no volume. Each start downloads ~75 GB (a few minutes with 16 parallel connections; the pod bills while it downloads).
 - Everything on the container disk is **erased when the pod stops**, including your outputs. Download videos and images before you stop the pod. This also means `AUTO_STOP_MIN` deletes unsaved outputs: set it to `0` if you want to decide yourself.
 - Supply your own files by link in the template environment (private Hugging Face repo links work with `HF_TOKEN`): `ICY_ZIP_URL`, `LORA_URLS` (space-separated), `INPUT_URLS` (for `model2_anchor.png`).
+
+## Two templates from one image (image vs video)
+The same image serves both; only the `MODEL_SET` env var differs, so each pod downloads only what it needs:
+
+| Template | `MODEL_SET` | Downloads | Use for |
+|---|---|---|---|
+| H3 ComfyUI Video | `video,finish` | H3 video + upscaler/skin models | Prep / Generate / Finish / Echo / Motion workflows |
+| H3 ComfyUI Image | `image` | H3 image model only | FirstFrame, Image, LoRA tester workflows |
+
+## JupyterLab
+Set `JUPYTER_PASSWORD` in the template (your own password). If it is empty a random one is generated and written to `/workspace/jupyter_password.txt` and shown in the container logs. If the base image does not start Jupyter, the entrypoint starts it itself after 45 s.
