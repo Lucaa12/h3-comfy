@@ -47,6 +47,16 @@ fi
 # workflows from the image (overwritten each start; save your own edits under a new name)
 cp -f /opt/h3/workflows/*.json "$DATA/user/default/workflows/" 2>/dev/null
 
+# ComfyUI starts NOW (restarts itself if it crashes, e.g. after an out-of-memory kill). Models that are still downloading
+# appear after the downloads finish: press R in ComfyUI (refresh node definitions) or reload the page.
+[ "${AUTO_STOP_MIN:-0}" != "0" ] && nohup bash /opt/h3/autostop.sh > /workspace/h3_autostop.log 2>&1 &
+( cd /opt/ComfyUI
+  while true; do
+    echo "== $(date) starting ComfyUI"
+    $PY main.py --listen 0.0.0.0 --port 8188 --base-directory "$DATA" ${COMFY_ARGS:-}
+    echo "ComfyUI exited ($?); restarting in 5 s"; sleep 5
+  done ) &
+
 touch /workspace/.h3_downloading
 H=https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main
 HI=https://huggingface.co/Comfy-Org/MiniMax-H3-Image/resolve/main
@@ -80,12 +90,5 @@ if has finish || has video; then
 fi
 rm -f /workspace/.h3_downloading
 df -h /workspace | tail -1
-
-# ComfyUI (restarts itself if it crashes, e.g. after an out-of-memory kill)
-[ "${AUTO_STOP_MIN:-0}" != "0" ] && nohup bash /opt/h3/autostop.sh > /workspace/h3_autostop.log 2>&1 &
-cd /opt/ComfyUI
-while true; do
-  echo "== $(date) starting ComfyUI"
-  $PY main.py --listen 0.0.0.0 --port 8188 --base-directory "$DATA" ${COMFY_ARGS:-}
-  echo "ComfyUI exited ($?); restarting in 5 s"; sleep 5
-done
+echo "== $(date) all downloads finished. In ComfyUI press R (or reload the page) so the new models show up."
+wait
