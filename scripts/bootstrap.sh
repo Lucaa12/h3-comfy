@@ -60,34 +60,38 @@ cp -f /opt/h3/workflows/*.json "$DATA/user/default/workflows/" 2>/dev/null
 touch /workspace/.h3_downloading
 H=https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main
 HI=https://huggingface.co/Comfy-Org/MiniMax-H3-Image/resolve/main
+q() { echo "$1 $2" >> /tmp/dl.list; }   # queue; downloaded 4 at a time below
+: > /tmp/dl.list
 has() { [[ ",$MODEL_SET," == *",$1,"* ]]; }
 if has image; then
-  dl $HI/diffusion_models/minimax_h3_image_pruned_int8_convrot.safetensors "$M/diffusion_models"
-  dl $HI/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors "$M/text_encoders"
-  dl $HI/vae/minimax_h3_image_vae_fp16.safetensors "$M/vae"
-  dl https://raw.githubusercontent.com/madebyollin/taehv/62f7591f59dfbb4c3c02b7a621d180a9eeaba26c/safetensors/taeh3.safetensors "$M/vae_approx"
+  q $HI/diffusion_models/minimax_h3_image_pruned_int8_convrot.safetensors "$M/diffusion_models"
+  q $HI/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors "$M/text_encoders"
+  q $HI/vae/minimax_h3_image_vae_fp16.safetensors "$M/vae"
+  q https://raw.githubusercontent.com/madebyollin/taehv/62f7591f59dfbb4c3c02b7a621d180a9eeaba26c/safetensors/taeh3.safetensors "$M/vae_approx"
 fi
 if has video; then
-  dl $H/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors "$M/text_encoders"
-  dl $H/vae/minimax_h3_audio_vae_fp32.safetensors "$M/vae"
-  dl $H/vae/minimax_h3_video_vae_fp16.safetensors "$M/vae"
-  dl $H/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors "$M/diffusion_models"
-  dl $H/loras/minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors "$M/loras"
-  dl $H/model_patches/minimax_h3_fun_controlnet_union_pruned_int8_convrot.safetensors "$M/model_patches"
-  dl https://huggingface.co/Comfy-Org/SDPose/resolve/main/checkpoints/sdpose_wholebody_fp16.safetensors "$M/checkpoints"
-  dl https://huggingface.co/Comfy-Org/SDPose/resolve/main/diffusion_models/rt_detr_v4-x-hgnet_fp16.safetensors "$M/diffusion_models"
-  dl https://huggingface.co/Comfy-Org/sam3.1/resolve/main/checkpoints/sam3.1_multiplex_fp16.safetensors "$M/checkpoints"
-  dl https://huggingface.co/Comfy-Org/Depth-Anything-3/resolve/main/geometry_estimation/depth_anything_3_mono_large.safetensors "$M/geometry_estimation"
+  q $H/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors "$M/text_encoders"
+  q $H/vae/minimax_h3_audio_vae_fp32.safetensors "$M/vae"
+  q $H/vae/minimax_h3_video_vae_fp16.safetensors "$M/vae"
+  q $H/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors "$M/diffusion_models"
+  q $H/loras/minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors "$M/loras"
+  q $H/model_patches/minimax_h3_fun_controlnet_union_pruned_int8_convrot.safetensors "$M/model_patches"
+  q https://huggingface.co/Comfy-Org/SDPose/resolve/main/checkpoints/sdpose_wholebody_fp16.safetensors "$M/checkpoints"
+  q https://huggingface.co/Comfy-Org/SDPose/resolve/main/diffusion_models/rt_detr_v4-x-hgnet_fp16.safetensors "$M/diffusion_models"
+  q https://huggingface.co/Comfy-Org/sam3.1/resolve/main/checkpoints/sam3.1_multiplex_fp16.safetensors "$M/checkpoints"
+  q https://huggingface.co/Comfy-Org/Depth-Anything-3/resolve/main/geometry_estimation/depth_anything_3_mono_large.safetensors "$M/geometry_estimation"
   if [ "${I2V:-0}" = "1" ]; then
-    dl $H/vae/minimax_h3_video_vae_int8_convrot.safetensors "$M/vae"
-    dl $H/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors "$M/diffusion_models"
-    dl https://huggingface.co/lightx2v/Minimax-h3-Turbo/resolve/main/minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors "$M/loras"
+    q $H/vae/minimax_h3_video_vae_int8_convrot.safetensors "$M/vae"
+    q $H/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors "$M/diffusion_models"
+    q https://huggingface.co/lightx2v/Minimax-h3-Turbo/resolve/main/minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors "$M/loras"
   fi
 fi
 if has finish || has video; then
-  dl https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.1/RealESRGAN_x2plus.pth "$M/upscale_models"
-  dl https://huggingface.co/licyk/sd-upscaler-models/resolve/main/ESRGAN/1x-ITF-SkinDiffDetail-Lite-v1.pth "$M/upscale_models"
+  q https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.1/RealESRGAN_x2plus.pth "$M/upscale_models"
+  q https://huggingface.co/licyk/sd-upscaler-models/resolve/main/ESRGAN/1x-ITF-SkinDiffDetail-Lite-v1.pth "$M/upscale_models"
 fi
+export -f dl; export HF_TOKEN
+awk '{n=$1; sub(/.*\//,"",n); k=$2"/"n; if(!seen[k]++) print}' /tmp/dl.list | xargs -P 4 -L 1 bash -c 'dl "$0" "$1"'
 rm -f /workspace/.h3_downloading
 df -h /workspace | tail -1
 echo "== $(date) all downloads finished. In ComfyUI press R (or reload the page) so the new models show up."
